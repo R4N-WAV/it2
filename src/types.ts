@@ -140,8 +140,15 @@ export interface DagState {
   historikk: { runde: number; test: number | null; tid: number }[];
 }
 
+/** Hvor langt du har kommet i én leksjon. */
+export interface LesState {
+  side: number; // siste side du var på (0-basert)
+  ferdig: number | null; // tidspunkt leksjonen ble lest ferdig
+}
+
 export interface AppData {
   versjon: 1;
+  leksjoner: Record<string, LesState>; // leksjon-id -> lesefremdrift
   dager: Record<string, DagState>;
   matchBest: Record<string, number>; // sett -> beste tid i ms
   aktivitet: string[]; // datoer (YYYY-MM-DD) med øving – for streak

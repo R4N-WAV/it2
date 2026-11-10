@@ -10,8 +10,9 @@ import type { AppData } from '../types';
 import { aktivDag, kalenderStatus, maalStatus, nesteSteg } from '../forlop';
 import { streak, tomDag } from '../store';
 import { begreper } from '../data/begreper';
+import { leksjonerForDag } from '../kurs';
 
-const tom: AppData = { versjon: 1, kort: {}, quiz: {}, eksamen: [], muntlig: {}, diagnose: null, studielogg: {}, dager: {}, matchBest: {}, aktivitet: [] };
+const tom: AppData = { versjon: 1, leksjoner: {}, kort: {}, quiz: {}, eksamen: [], muntlig: {}, diagnose: null, studielogg: {}, dager: {}, matchBest: {}, aktivitet: [] };
 
 describe('Leitner', () => {
   it('nytt kort: kunne → boks 2, kunne ikke → boks 1, usikker → boks 1', () => {
@@ -82,10 +83,12 @@ describe('Innhold', () => {
 });
 
 describe('Dagsforløp', () => {
-  it('starter på dag 1 med diagnosen, og går videre når diagnosen er tatt', () => {
+  it('starter på dag 1 med lesing, så diagnosen, og går videre når diagnosen er tatt', () => {
     expect(aktivDag(tom).dagNr).toBe(1);
-    expect(nesteSteg(tom, plan[0])?.id).toBe('diag');
-    const d: AppData = { ...tom, diagnose: { 'q-g1': true } };
+    expect(nesteSteg(tom, plan[0])?.id).toBe('les');
+    const lest = Object.fromEntries(leksjonerForDag(1).map((l) => [l.id, { side: 0, ferdig: 1 }]));
+    expect(nesteSteg({ ...tom, leksjoner: lest }, plan[0])?.id).toBe('diag');
+    const d: AppData = { ...tom, leksjoner: lest, diagnose: { 'q-g1': true } };
     expect(nesteSteg(d, plan[0])?.id).toBe('java');
   });
   it('tar obligatoriske steg før valgfrie, og hopper over buffer-dagen', () => {

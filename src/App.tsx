@@ -9,6 +9,7 @@ import { kompetansemal, topics } from './data/topics';
 import { aktivDag, dagFremdrift, dagState, kalenderStatus, maalStatus, nesteSteg, stegFullfort } from './forlop';
 import { LaasSkjerm, erUlast, laas } from './Lock';
 import { LaerOkt } from './Laer';
+import { KursSide, LeksjonLeser, LeksjonOppslag, LesOkt } from './Kurs';
 import { MatchSpill } from './Match';
 import { QuizOkt } from './QuizOkt';
 import { BeredskapKort, Diagnose, EksamenOppgave, Lagring, Sensorsporsmal, Simulering, SjekkSteg } from './sider';
@@ -20,9 +21,10 @@ import { useTema, type Tema } from './theme';
 import type { AppData, QuizItem, TopicId } from './types';
 
 /* ---------- Navigasjon ---------- */
-type Side = 'idag' | 'plan' | 'ov' | 'eksamen' | 'fremdrift' | 'innstillinger';
+type Side = 'idag' | 'laer' | 'plan' | 'ov' | 'eksamen' | 'fremdrift' | 'innstillinger';
 const MENY: { side: Side; navn: string; ikon: string; mobil: boolean }[] = [
   { side: 'idag', navn: 'I dag', ikon: 'idag', mobil: true },
+  { side: 'laer', navn: 'Lær', ikon: 'bok', mobil: true },
   { side: 'plan', navn: 'Plan', ikon: 'plan', mobil: true },
   { side: 'ov', navn: 'Øv', ikon: 'ov', mobil: true },
   { side: 'eksamen', navn: 'Eksamen', ikon: 'eksamen', mobil: true },
@@ -42,11 +44,11 @@ function lesHash(): { side: Side; dag: string | null } {
 }
 
 const STEG_IKON: Record<Steg['type'], string> = {
-  diagnose: 'mal', sjekk: 'sjekk', kort: 'kort', repetisjon: 'repeter', oppgaver: 'ov', svakheter: 'mal',
+  les: 'bok', diagnose: 'mal', sjekk: 'sjekk', kort: 'kort', repetisjon: 'repeter', oppgaver: 'ov', svakheter: 'mal',
   eksamen: 'eksamen', 'muntlig-spm': 'mikrofon', 'muntlig-sim': 'mikrofon', match: 'match', dagstest: 'stjerne',
 };
 const STEG_TYPE: Record<Steg['type'], string> = {
-  diagnose: 'Diagnose', sjekk: 'Sjekkliste', kort: 'Lær kort', repetisjon: 'Repetisjon', oppgaver: 'Oppgaver', svakheter: 'Svakheter',
+  les: 'Les', diagnose: 'Diagnose', sjekk: 'Sjekkliste', kort: 'Lær kort', repetisjon: 'Repetisjon', oppgaver: 'Oppgaver', svakheter: 'Svakheter',
   eksamen: 'Eksamensoppgave', 'muntlig-spm': 'Muntlig', 'muntlig-sim': 'Muntlig simulering', match: 'Match', dagstest: 'Dagstest',
 };
 
@@ -73,6 +75,7 @@ function startSteg(apne: Apne, d: AppData, dag: PlanDay, steg: Steg) {
   const testIds = dag.steg.find((s) => s.type === 'dagstest')?.ids ?? [];
   apne(steg.tittel, (lukk) => {
     switch (steg.type) {
+      case 'les': return <LesOkt dagNr={dag.dagNr} onFerdig={ferdig(lukk)} onAvslutt={lukk} />;
       case 'diagnose': return <Diagnose onFerdig={ferdig(lukk)} onAvslutt={lukk} />;
       case 'sjekk': return <SjekkSteg instruks={steg.instruks ?? []} onFerdig={ferdig(lukk)} onAvslutt={lukk} />;
       case 'kort': return <LaerOkt kort={flashcards.filter((k) => steg.temaer?.includes(k.tema))} onFerdig={ferdig(lukk)} onAvslutt={lukk} />;
@@ -195,6 +198,9 @@ function Hoved() {
 
       <main className="innhold">
         {rute.side === 'idag' && <IDag d={d} apne={apne} gaTil={gaTil} />}
+        {rute.side === 'laer' && <KursSide d={d}
+          apneLeksjon={(l) => apne(l.tittel, (lukk) => <LeksjonLeser leksjon={l} onFerdig={lukk} onAvslutt={lukk} />)}
+          apneOppslag={(l) => apne(l.tittel, (lukk) => <LeksjonOppslag leksjon={l} onLukk={lukk} />)} />}
         {rute.side === 'plan' && (rute.dag
           ? <DagSide d={d} dag={plan.find((p) => p.dato === rute.dag)!} apne={apne} gaTil={gaTil} />
           : <PlanSide d={d} gaTil={gaTil} />)}
@@ -303,7 +309,7 @@ function PlanSide({ d, gaTil }: { d: AppData; gaTil: (s: Side, dag?: string) => 
     <div className="stack">
       <div className="side-topp">
         <h1>Studieplan</h1>
-        <p className="dempet">9.–17. november. Hver dag har steg i fast rekkefølge og et mål. Du kan ta en dag så mange ganger du vil, og bekrefter den når du føler at du forstår den.</p>
+        <p className="dempet">9.–17. november. Hver dag starter med at du <b>leser</b> dagens leksjoner, og deretter øver du på det du har lest. Stegene kommer i fast rekkefølge, og hver dag har et mål. Du kan ta en dag så mange ganger du vil, og bekrefter den når du føler at du forstår den.</p>
         <p className="liten"><span className="chip">minimum</span> = dagen er med i minimumsplanen. Steg merket «ekstra» hører til den optimale planen.</p>
       </div>
       {plan.map((p) => {

@@ -7,6 +7,9 @@ Studieperiode 9.–17. november 2026.
 
 ## Hva appen gjør
 
+- **Lær** er et kurs fra null: 24 leksjoner du leser side for side, med forklaringer, kodeeksempler (Java og
+  pseudokode) og kontrollspørsmål du må svare på før du går videre. Hver studiedag starter med dagens leksjoner –
+  først lærer du, så øver du. Uleste leksjoner fra tidligere dager tas automatisk først.
 - **I dag** viser hvor du er i planen og nøyaktig hva du skal gjøre som neste steg.
 - **Studieplan** med 9 dager. Hver dag har steg i fast rekkefølge, mål for mestring, og kan tas så mange ganger du vil
   («runder») til du bekrefter at du forstår den.
@@ -38,6 +41,7 @@ npm run build    # produksjonsbygg til dist/
 
 Hver push til `main` bygges, testes og publiseres automatisk til GitHub Pages (`.github/workflows/deploy.yml`).
 
-Innhold: `src/data/` (flashcards, oppgaver, eksamensoppgaver, studieplan, begreper).
+Innhold: `src/leksjoner/` (leksjonene som Markdown – formatet er beskrevet øverst i `src/kurs.ts`) og `src/data/`
+(flashcards, oppgaver, eksamensoppgaver, studieplan, begreper).
 Kode i oppgavene er Java; algoritmer også i pseudokode. Eksamensoppgavene er egne øvingsoppgaver laget etter
 oppgavetypene i settene 2023–2026, ikke kopier av originalene.

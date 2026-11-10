@@ -14,7 +14,7 @@ export const EKSAMENSDATO = new Date('2026-11-18T09:00:00');
 export const SISTE_STUDIEDAG = new Date('2026-11-17T23:59:00');
 
 function tom(): AppData {
-  return { versjon: 1, kort: {}, quiz: {}, eksamen: [], muntlig: {}, diagnose: null, studielogg: {}, dager: {}, matchBest: {}, aktivitet: [] };
+  return { versjon: 1, leksjoner: {}, kort: {}, quiz: {}, eksamen: [], muntlig: {}, diagnose: null, studielogg: {}, dager: {}, matchBest: {}, aktivitet: [] };
 }
 
 function last(): AppData {
@@ -78,6 +78,19 @@ export function kortSomForfaller(d: AppData, naa = Date.now()) {
     return s && s.due <= naa;
   });
 }
+
+/* ---------- Leksjoner (kurset) ---------- */
+
+export function lagreLesePosisjon(id: string, side: number) {
+  const g = data.leksjoner[id] ?? { side: 0, ferdig: null };
+  if (g.side === side) return;
+  lagre({ ...data, leksjoner: { ...data.leksjoner, [id]: { ...g, side } } });
+}
+export function fullforLeksjon(id: string) {
+  const g = data.leksjoner[id] ?? { side: 0, ferdig: null };
+  lagre({ ...data, leksjoner: { ...data.leksjoner, [id]: { side: 0, ferdig: g.ferdig ?? Date.now() } } });
+}
+export const erLest = (d: AppData, id: string) => !!d.leksjoner[id]?.ferdig;
 
 /* ---------- Quiz ---------- */
 

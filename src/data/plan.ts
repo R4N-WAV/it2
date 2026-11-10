@@ -1,6 +1,6 @@
 import type { TopicId } from '../types';
 
-export type StegType = 'diagnose' | 'sjekk' | 'kort' | 'repetisjon' | 'oppgaver' | 'svakheter' | 'eksamen' | 'muntlig-spm' | 'muntlig-sim' | 'match' | 'dagstest';
+export type StegType = 'les' | 'diagnose' | 'sjekk' | 'kort' | 'repetisjon' | 'oppgaver' | 'svakheter' | 'eksamen' | 'muntlig-spm' | 'muntlig-sim' | 'match' | 'dagstest';
 
 export interface Steg {
   id: string;
@@ -42,12 +42,13 @@ const JAVA_OPPSETT = [
 
 export const plan: PlanDay[] = [
   {
-    dato: '2026-11-09', dagNr: 1, ukedag: 'Mandag', tittel: 'Grunnlaget i Java', tid: '17:30–18:40 (70 min)', minimum: true, type: 'okt',
+    dato: '2026-11-09', dagNr: 1, ukedag: 'Mandag', tittel: 'Grunnlaget i Java', tid: '17:00–19:00 (ca. 2 t med lesing)', minimum: true, type: 'okt',
     mal: 'Kunne spore en løkke og forklare en betingelse – i pseudokode og Java.',
     maal: ['Alle dagens flashcards riktig minst én gang', 'Minst 80 % på dagstesten (5 av 6)', 'Kunne forklare høyt hvorfor 7 / 2 blir 3 i Java'],
     temaer: ['grunnlag', 'lister'],
     steg: [
-      { id: 'diag', type: 'diagnose', tittel: 'Diagnostisk test', minutter: 15 },
+      { id: 'les', type: 'les', tittel: 'Les: fra null til din første kode', minutter: 55 },
+      { id: 'diag', type: 'diagnose', tittel: 'Diagnostisk test (se hva som satt)', minutter: 15 },
       { id: 'java', type: 'sjekk', tittel: 'Få Java til å kjøre på PC-en', minutter: 15, instruks: JAVA_OPPSETT },
       { id: 'kort', type: 'kort', tittel: 'Lær kortene: variabler, if og løkker', minutter: 15, temaer: ['grunnlag'] },
       { id: 'ovelse', type: 'oppgaver', tittel: 'Øv: forutsi utskriften', minutter: 15, temaer: ['grunnlag', 'lister'] },
@@ -57,12 +58,13 @@ export const plan: PlanDay[] = [
     repeter: 'Alt du svarte feil på i diagnosen – det havner automatisk i «Svakheter».',
   },
   {
-    dato: '2026-11-10', dagNr: 2, ukedag: 'Tirsdag', tittel: 'Pseudokode og flytskjema', tid: '17:30–18:40 (70 min)', minimum: true, type: 'okt',
+    dato: '2026-11-10', dagNr: 2, ukedag: 'Tirsdag', tittel: 'Pseudokode og flytskjema', tid: '17:00–18:55 (ca. 2 t med lesing)', minimum: true, type: 'okt',
     mal: 'Kunne spore, sortere og skrive enkel pseudokode, og tolke flytskjema (med i 7 av 7 eksamener).',
     maal: ['Alle dagens flashcards riktig minst én gang', 'Minst 80 % på dagstesten', 'Minst 60 % på eksamensoppgaven «billettpris»', 'Kunne skrive TrommeLom-pseudokoden uten hjelp'],
     temaer: ['algoritmer', 'funksjoner'],
     steg: [
       { id: 'rep', type: 'repetisjon', tittel: 'Repeter kort fra i går', minutter: 5 },
+      { id: 'les', type: 'les', tittel: 'Les: metoder, pseudokode og flytskjema', minutter: 45 },
       { id: 'kort', type: 'kort', tittel: 'Lær kortene: pseudokode og algoritmer', minutter: 15, temaer: ['algoritmer'] },
       { id: 'ovelse', type: 'oppgaver', tittel: 'Øv: sporing, sortering og TrommeLom', minutter: 20, temaer: ['algoritmer'] },
       { id: 'eks', type: 'eksamen', tittel: 'Eksamensoppgave: billettpris', minutter: 15, taskId: 'x-pseudo' },
@@ -73,12 +75,13 @@ export const plan: PlanDay[] = [
     repeter: 'Sporingstabell for løkker, og MOD/%.',
   },
   {
-    dato: '2026-11-11', dagNr: 3, ukedag: 'Onsdag', tittel: 'Klasser og objekter', tid: '17:30–18:45 (75 min)', minimum: true, type: 'okt',
+    dato: '2026-11-11', dagNr: 3, ukedag: 'Onsdag', tittel: 'Klasser og objekter', tid: '17:00–18:50 (ca. 1 t 50 min med lesing)', minimum: true, type: 'okt',
     mal: 'Kunne forklare klasse, objekt, felt, metode og konstruktør, og lage en enkel klasse i Java.',
     maal: ['Alle dagens flashcards riktig minst én gang', 'Minst 80 % på dagstesten', 'Ha skrevet og kjørt Batteri-klassen i editoren', 'Kunne forklare høyt hva this og konstruktøren gjør'],
     temaer: ['oop-klasser', 'uml'],
     steg: [
       { id: 'rep', type: 'repetisjon', tittel: 'Repeter forfalte kort', minutter: 5 },
+      { id: 'les', type: 'les', tittel: 'Les: klasser, objekter og UML', minutter: 35 },
       { id: 'kort', type: 'kort', tittel: 'Lær kortene: klasser og UML', minutter: 15, temaer: ['oop-klasser', 'uml'] },
       { id: 'match', type: 'match', tittel: 'Match: OOP-begreper', minutter: 5, temaer: ['oop-klasser', 'uml', 'oop-arv'] },
       { id: 'ovelse', type: 'oppgaver', tittel: 'Øv: Hund, Konto, Batteri, Kalkulator', minutter: 25, temaer: ['oop-klasser', 'uml'] },
@@ -87,12 +90,13 @@ export const plan: PlanDay[] = [
     repeter: 'Konstruktør og this – det MÅ sitte før arv i morgen.',
   },
   {
-    dato: '2026-11-12', dagNr: 4, ukedag: 'Torsdag', tittel: 'Arv og komposisjon', tid: '17:30–18:45 (75 min)', minimum: true, type: 'okt',
+    dato: '2026-11-12', dagNr: 4, ukedag: 'Torsdag', tittel: 'Arv og komposisjon', tid: '17:00–18:55 (ca. 2 t med lesing)', minimum: true, type: 'okt',
     mal: 'Kunne bruke arv (extends, super), komposisjon (ArrayList av objekter) og lese klassediagram.',
     maal: ['Alle dagens flashcards riktig minst én gang', 'Minst 80 % på dagstesten', 'Minst 60 % på «Konstruktører og arv»', 'Kunne forklare er-en vs har-en med et eget eksempel'],
     temaer: ['oop-arv', 'oop-komposisjon', 'uml'],
     steg: [
       { id: 'rep', type: 'repetisjon', tittel: 'Repeter forfalte kort', minutter: 5 },
+      { id: 'les', type: 'les', tittel: 'Les: arv, komposisjon og testing', minutter: 40 },
       { id: 'kort', type: 'kort', tittel: 'Lær kortene: arv og relasjoner', minutter: 15, temaer: ['oop-arv', 'oop-komposisjon'] },
       { id: 'ovelse', type: 'oppgaver', tittel: 'Øv: arv, relasjoner og UML', minutter: 20, temaer: ['oop-arv', 'oop-komposisjon', 'uml'] },
       { id: 'eks', type: 'eksamen', tittel: 'Eksamensoppgave: konstruktører og arv', minutter: 15, taskId: 'x-konstruktor' },
@@ -108,17 +112,23 @@ export const plan: PlanDay[] = [
     temaer: [],
     steg: [
       { id: 'rep', type: 'repetisjon', tittel: 'Repeter forfalte kort (gjerne på mobilen)', minutter: 15, valgfri: true },
+      { id: 'les-igjen', type: 'sjekk', tittel: 'Ta igjen uleste leksjoner', minutter: 20, valgfri: true, instruks: [
+        'Åpne «Lær» og se om noen leksjoner fra dag 1–4 mangler hake.',
+        'Les dem nå – dag 6 og 7 bygger på klasser, lister og løkker.',
+        'Har du lest alt: bruk «Les alt» på den leksjonen du synes var vanskeligst.',
+      ] },
       { id: 'match', type: 'match', tittel: 'Match: blandede begreper', minutter: 5, valgfri: true },
     ],
     repeter: '–',
   },
   {
-    dato: '2026-11-14', dagNr: 6, ukedag: 'Lørdag', tittel: 'Datasett og etikk', tid: '2 × 75 min med pause (ca. 2,5 t)', minimum: true, type: 'okt',
+    dato: '2026-11-14', dagNr: 6, ukedag: 'Lørdag', tittel: 'Datasett og etikk', tid: '3 × 70 min med pauser (ca. 3,5 t med lesing)', minimum: true, type: 'okt',
     mal: 'Kunne lese CSV, filtrere, gruppere og regne prosent, og skrive en strukturert etisk drøfting.',
     maal: ['Alle dagens flashcards riktig minst én gang', 'Minst 80 % på dagstesten', 'Minst 60 % på «elbilandel» og «kameraovervåking»', 'Kunne skrive CSV-løkken og drøftingsmalen fra hukommelsen'],
     temaer: ['data', 'lagring', 'etikk'],
     steg: [
       { id: 'rep', type: 'repetisjon', tittel: 'Repeter forfalte kort', minutter: 5 },
+      { id: 'les', type: 'les', tittel: 'Les: datasett, lagring, etikk og personvern', minutter: 60 },
       { id: 'kort', type: 'kort', tittel: 'Lær kortene: datasett og lagring', minutter: 15, temaer: ['data', 'lagring'] },
       { id: 'ovelse', type: 'oppgaver', tittel: 'Øv: datasett og lagring', minutter: 20, temaer: ['data', 'lagring'] },
       { id: 'eks', type: 'eksamen', tittel: 'Eksamensoppgave: elbilandel (CSV)', minutter: 40, taskId: 'x-csv' },
@@ -131,12 +141,13 @@ export const plan: PlanDay[] = [
     repeter: 'int-divisjon i prosentregning, og konklusjon i drøftinger.',
   },
   {
-    dato: '2026-11-15', dagNr: 7, ukedag: 'Søndag', tittel: 'Spill, simulering og stor OOP', tid: '2 × 75 min med pause (ca. 2,5 t)', minimum: true, type: 'okt',
+    dato: '2026-11-15', dagNr: 7, ukedag: 'Søndag', tittel: 'Spill, simulering og stor OOP', tid: '2 × 80 min med pause (ca. 3 t med lesing)', minimum: true, type: 'okt',
     mal: 'Kunne bygge et lite spill/en simulering trinnvis, og løse en stor OOP-oppgave på tid.',
     maal: ['Alle dagens flashcards riktig minst én gang', 'Minst 80 % på dagstesten', 'Minst 60 % på «togsett» og «skogbrann»', 'Kunne forklare hvorfor man bruker et nytt rutenett for neste tilstand'],
     temaer: ['spill', 'oop-komposisjon', 'feilsoking'],
     steg: [
       { id: 'rep', type: 'repetisjon', tittel: 'Repeter forfalte kort', minutter: 5 },
+      { id: 'les', type: 'les', tittel: 'Les: spill og simulering', minutter: 20 },
       { id: 'kort', type: 'kort', tittel: 'Lær kortene: spill og simulering', minutter: 15, temaer: ['spill'] },
       { id: 'ovelse', type: 'oppgaver', tittel: 'Øv: spill og simulering', minutter: 15, temaer: ['spill'] },
       { id: 'eks', type: 'eksamen', tittel: 'Eksamensoppgave: skogbrann', minutter: 40, taskId: 'x-skogbrann' },
@@ -147,12 +158,13 @@ export const plan: PlanDay[] = [
     repeter: 'Spill-løkken (tegn → input → oppdater → kollisjon) og kantsjekk.',
   },
   {
-    dato: '2026-11-16', dagNr: 8, ukedag: 'Mandag', tittel: 'Muntlig-praktisk trening', tid: '17:30–18:45 (75 min)', minimum: false, type: 'okt',
+    dato: '2026-11-16', dagNr: 8, ukedag: 'Mandag', tittel: 'Muntlig-praktisk trening', tid: '17:00–18:45 (ca. 1 t 45 min med lesing)', minimum: false, type: 'okt',
     mal: 'Kunne forklare egen kode muntlig, svare på oppfølgingsspørsmål og håndtere en ukjent tilleggsoppgave (REA3050).',
     maal: ['Alle dagens flashcards riktig minst én gang', 'Minst 80 % på dagstesten', 'Én full simulering vurdert som «Delvis» eller bedre', 'Kunne forklare polymorfi på 2 minutter'],
     temaer: ['systemutvikling', 'oop-arv', 'lagring'],
     steg: [
       { id: 'rep', type: 'repetisjon', tittel: 'Repeter forfalte kort', minutter: 5 },
+      { id: 'les', type: 'les', tittel: 'Les: systemutvikling og brukervennlighet', minutter: 25 },
       { id: 'kort', type: 'kort', tittel: 'Lær kortene: systemutvikling og brukervennlighet', minutter: 10, temaer: ['systemutvikling'] },
       { id: 'spm', type: 'muntlig-spm', tittel: 'Sensorspørsmål – svar høyt', minutter: 15, antall: 5 },
       { id: 'sim', type: 'muntlig-sim', tittel: 'Full simulering: kinobillettsystem', minutter: 45, simId: 'sim-kino' },
@@ -162,11 +174,12 @@ export const plan: PlanDay[] = [
     repeter: 'Sensorspørsmål du vurderte som «svakt».',
   },
   {
-    dato: '2026-11-17', dagNr: 9, ukedag: 'Tirsdag', tittel: 'Avslutning og beredskap', tid: '17:00–18:30 (90 min)', minimum: true, type: 'avslutning',
+    dato: '2026-11-17', dagNr: 9, ukedag: 'Tirsdag', tittel: 'Avslutning og beredskap', tid: '17:00–18:45 (ca. 1 t 45 min)', minimum: true, type: 'avslutning',
     mal: 'Avsluttende repetisjon og ærlig vurdering av eksamensberedskap. Ingen nye store temaer.',
     maal: ['Minst 70 % på den blandede sluttesten', 'Ingen forfalte flashcards igjen', 'Praktisk sjekkliste for eksamensdagen gjennomgått'],
     temaer: [],
     steg: [
+      { id: 'les', type: 'les', tittel: 'Les: eksamensteknikk', minutter: 15 },
       { id: 'svak', type: 'svakheter', tittel: 'Svakhetsøkt', minutter: 20 },
       { id: 'rep', type: 'repetisjon', tittel: 'Alle forfalte kort', minutter: 15 },
       { id: 'eks', type: 'eksamen', tittel: 'Eksamensoppgave: bibliotek (på tid)', minutter: 35, taskId: 'x-bibliotek' },
