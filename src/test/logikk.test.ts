@@ -4,7 +4,8 @@ import { flashcards } from '../data/flashcards';
 import { quiz, diagnoseIds } from '../data/quiz';
 import { examTasks, oralQuestions, oralSims } from '../data/exam';
 import { topics, kompetansemal } from '../data/topics';
-import { plan } from '../data/plan';
+import { plan, sisteDag, erSisteDag } from '../data/plan';
+import { leksjoner } from '../kurs';
 import { quiz as alleQuiz } from '../data/quiz';
 import type { AppData } from '../types';
 import { aktivDag, kalenderStatus, maalStatus, nesteSteg } from '../forlop';
@@ -121,5 +122,20 @@ describe('Dagsforløp', () => {
       if (s.type === 'kort') expect(flashcards.some((k) => s.temaer!.includes(k.tema))).toBe(true);
     }
     expect(begreper.length).toBeGreaterThanOrEqual(40);
+  });
+
+  it('siste dag: alle steg peker på innhold som finnes, og lesing kommer før øving på samme tema', () => {
+    for (const s of sisteDag.steg) {
+      for (const id of s.ids ?? []) expect(alleQuiz.some((q) => q.id === id), id).toBe(true);
+      for (const id of s.leksjoner ?? []) expect(leksjoner.some((l) => l.id === id), id).toBe(true);
+      if (s.taskId) expect(examTasks.some((t) => t.id === s.taskId), s.taskId).toBe(true);
+      if (s.type === 'les') expect(s.leksjoner?.length, s.id).toBeGreaterThan(0);
+    }
+    expect(nesteSteg(tom, sisteDag)?.id).toBe('teknikk');
+    const lest = { 'l-eksamensteknikk': { side: 0, ferdig: 1 } };
+    expect(nesteSteg({ ...tom, leksjoner: lest }, sisteDag)?.id).toBe('huskeark');
+    expect(plan.some((p) => p.dato === sisteDag.dato)).toBe(false);
+    expect(erSisteDag('2026-11-17')).toBe(true);
+    expect(erSisteDag('2026-11-16')).toBe(false);
   });
 });

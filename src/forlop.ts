@@ -1,6 +1,6 @@
 import { flashcards } from './data/flashcards';
 import { plan, type PlanDay, type Steg } from './data/plan';
-import { leksjonerForDag } from './kurs';
+import { leksjoner, leksjonerForDag } from './kurs';
 import { datoNokkel, erLest, tomDag } from './store';
 import type { AppData, DagState } from './types';
 
@@ -11,7 +11,7 @@ export function stegFullfort(d: AppData, dag: PlanDay, steg: Steg): boolean {
   if (steg.type === 'diagnose') return d.diagnose !== null || dagState(d, dag.dato).fullfort.includes(steg.id);
   // Lesing gjelder hele kurset: er leksjonene lest, er steget gjort (også i nye runder).
   if (steg.type === 'les') {
-    const l = leksjonerForDag(dag.dagNr);
+    const l = steg.leksjoner ? leksjoner.filter((x) => steg.leksjoner!.includes(x.id)) : leksjonerForDag(dag.dagNr);
     return (l.length > 0 && l.every((x) => erLest(d, x.id))) || dagState(d, dag.dato).fullfort.includes(steg.id);
   }
   return dagState(d, dag.dato).fullfort.includes(steg.id);

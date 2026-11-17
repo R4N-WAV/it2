@@ -1,6 +1,6 @@
 import type { TopicId } from '../types';
 
-export type StegType = 'les' | 'diagnose' | 'sjekk' | 'kort' | 'repetisjon' | 'oppgaver' | 'svakheter' | 'eksamen' | 'muntlig-spm' | 'muntlig-sim' | 'match' | 'dagstest';
+export type StegType = 'huskeark' | 'les' | 'diagnose' | 'sjekk' | 'kort' | 'repetisjon' | 'oppgaver' | 'svakheter' | 'eksamen' | 'muntlig-spm' | 'muntlig-sim' | 'match' | 'dagstest';
 
 export interface Steg {
   id: string;
@@ -11,7 +11,8 @@ export interface Steg {
   temaer?: TopicId[];
   taskId?: string;
   simId?: string;
-  ids?: string[];
+  ids?: string[]; // dagstest/oppgaver: bestemte quiz-id-er
+  leksjoner?: string[]; // les: bestemte leksjoner i stedet for dagens
   krav?: number; // dagstest: andel riktige som kreves (0–1)
   antall?: number;
   instruks?: string[];
@@ -197,6 +198,50 @@ export const plan: PlanDay[] = [
     repeter: '–',
   },
 ];
+
+/**
+ * «Siste dag»: en komprimert plan for dagen før skriftlig eksamen, for deg som ikke har fått fulgt planen.
+ * Stegene er sortert etter poeng per minutt – stopper du halvveis, har du likevel gjort det viktigste.
+ * Fremdriften lagres under egen nøkkel, så den vanlige planen blir ikke rørt.
+ */
+export const SISTE_DAG_NOKKEL = 'siste-dag';
+export const sisteDag: PlanDay = {
+  dato: SISTE_DAG_NOKKEL, dagNr: 0, ukedag: 'Tirsdag', tittel: 'Siste dag før eksamen', tid: 'Kjernen ca. 3 t – stopp når du må', minimum: true, type: 'avslutning',
+  mal: 'Få flest mulig sikre poeng i morgen: kjenne oppgavetypene, ha en mal for drøfting, kunne spore løkker, forstå en klasse og et CSV-mønster – og ha et huskeark klart.',
+  maal: ['Minst 60 % på den blandede sluttesten', 'Etikkoppgaven og billettpris-oppgaven levert og sammenlignet med løsningsforslaget', 'Praktisk sjekkliste for eksamensdagen gjennomgått'],
+  temaer: ['algoritmer', 'etikk', 'oop-klasser', 'data'],
+  steg: [
+    { id: 'teknikk', type: 'les', tittel: 'Les: eksamensteknikk (hvordan du sanker poeng)', minutter: 12, leksjoner: ['l-eksamensteknikk'] },
+    { id: 'huskeark', type: 'huskeark', tittel: 'Se gjennom huskearket (skriv det ut til slutt)', minutter: 10 },
+    { id: 'les-etikk', type: 'les', tittel: 'Les: etikk og drøfting', minutter: 15, leksjoner: ['l-etikk'] },
+    { id: 'eks-etikk', type: 'eksamen', tittel: 'Eksamensoppgave: kameraovervåking (drøfting)', minutter: 25, taskId: 'x-kamera' },
+    { id: 'les-kode', type: 'les', tittel: 'Les: løkker, sporing og pseudokode', minutter: 27, leksjoner: ['l-lokker', 'l-pseudokode'] },
+    { id: 'ov-kode', type: 'oppgaver', tittel: 'Øv: hva skrives ut? (sporing og pseudokode)', minutter: 15, ids: ['q-g4', 'q-g5', 'q-g6', 'q-a3', 'q-a4', 'q-a6', 'q-a7', 'q-a10'] },
+    { id: 'eks-pseudo', type: 'eksamen', tittel: 'Eksamensoppgave: billettpris (pseudokode og flytskjema)', minutter: 15, taskId: 'x-pseudo' },
+    { id: 'les-oop', type: 'les', tittel: 'Les: klasser, objekter og klassediagram', minutter: 25, leksjoner: ['l-klasser', 'l-uml'] },
+    { id: 'ov-oop', type: 'oppgaver', tittel: 'Øv: klasser og UML', minutter: 10, ids: ['q-o1', 'q-o2', 'q-o3', 'q-o4', 'q-o5', 'q-u1'] },
+    { id: 'les-data', type: 'les', tittel: 'Les: datasett og CSV', minutter: 15, leksjoner: ['l-csv'] },
+    { id: 'test', type: 'dagstest', tittel: 'Blandet sluttest', minutter: 12, ids: ['q-g4', 'q-a7', 'q-a8', 'q-o3', 'q-u2', 'q-e2', 'q-d1', 'q-d6', 'q-p1', 'q-p2'], krav: 0.6 },
+    { id: 'sjekk', type: 'sjekk', tittel: 'Sjekkliste før eksamensdagen', minutter: 10, instruks: [
+      'Sjekk hjelpemiddelreglene for REA3049 i eksamensinformasjonen din. Er egne notater lov: skriv ut huskearket.',
+      'Java og editor virker på PC-en du skal bruke (lag og kjør et Hei-program nå hvis du ikke har gjort det).',
+      'Du vet hvordan du åpner en vedlagt fil (f.eks. en CSV) fra programmet ditt.',
+      'Lader, legitimasjon og innlogging er klart.',
+      'Eksamen starter 09:00 (5 timer). Kommer du etter 10:00, får du ikke gjennomføre.',
+      'Ikke skriv navnet ditt i besvarelsen. Oppgi kilder du bruker.',
+      'Legg deg i god tid – søvn gir mer enn én time ekstra lesing.',
+    ] },
+    { id: 'les-arv', type: 'les', tittel: 'Ekstra: arv og super', minutter: 16, leksjoner: ['l-arv'], valgfri: true },
+    { id: 'eks-konstruktor', type: 'eksamen', tittel: 'Ekstra: konstruktører og arv', minutter: 15, taskId: 'x-konstruktor', valgfri: true },
+    { id: 'les-analyse', type: 'les', tittel: 'Ekstra: analysere data (gruppering og prosent)', minutter: 15, leksjoner: ['l-dataanalyse'], valgfri: true },
+    { id: 'les-spill', type: 'les', tittel: 'Ekstra: spill og simulering', minutter: 18, leksjoner: ['l-spill'], valgfri: true },
+    { id: 'eks-csv', type: 'eksamen', tittel: 'Ekstra: elbilandel (CSV) på tid', minutter: 40, taskId: 'x-csv', valgfri: true },
+  ],
+  repeter: 'Huskearket – les det én gang til i morgen tidlig.',
+};
+
+/** Siste dag-modus gjelder dagen før skriftlig eksamen og selve eksamensmorgenen. */
+export const erSisteDag = (dato: string) => dato === '2026-11-17' || dato === '2026-11-18';
 
 /** Hvis du mister en dag: gjør disse temaene først (rangert etter betydning for å bestå). */
 export const prioritetsrekkefolge: { tema: string; hvorfor: string }[] = [

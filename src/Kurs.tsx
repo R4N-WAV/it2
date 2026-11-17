@@ -132,11 +132,12 @@ export function LeksjonOppslag({ leksjon, onLukk }: { leksjon: Leksjon; onLukk: 
 }
 
 /* ---------- Lese-steget i studieplanen: flere leksjoner etter hverandre ---------- */
-export function LesOkt({ dagNr, onFerdig, onAvslutt }: { dagNr: number; onFerdig: () => void; onAvslutt: () => void }) {
+export function LesOkt({ dagNr, ids, onFerdig, onAvslutt }: { dagNr: number; ids?: string[]; onFerdig: () => void; onAvslutt: () => void }) {
   const d = useData();
   // Uleste leksjoner fra tidligere dager tas først – kurset bygger på seg selv.
-  const [etterslep] = useState(() => leksjoner.filter((l) => l.dag < dagNr && !erLest(d, l.id)));
-  const liste = [...etterslep, ...leksjoner.filter((l) => l.dag === dagNr)];
+  // Med faste leksjoner (siste dag) leses bare de, uten etterslep.
+  const [etterslep] = useState(() => (ids ? [] : leksjoner.filter((l) => l.dag < dagNr && !erLest(d, l.id))));
+  const liste = ids ? leksjoner.filter((l) => ids.includes(l.id)) : [...etterslep, ...leksjoner.filter((l) => l.dag === dagNr)];
   const [aktiv, setAktiv] = useState<Leksjon | null>(null);
   const neste = liste.find((l) => !erLest(d, l.id));
 
@@ -147,7 +148,9 @@ export function LesOkt({ dagNr, onFerdig, onAvslutt }: { dagNr: number; onFerdig
       <div className="flate">
         <h2>Les før du øver</h2>
         <p className="dempet">
-          Her lærer du stoffet du skal øve på i dag. Les én leksjon om gangen, i rekkefølge. Svar på spørsmålene underveis – de sjekker at du har forstått før du går videre.
+          {ids
+            ? 'Les dette nå – det er det du skal øve på i neste steg. Svar på spørsmålene underveis. Har du lest leksjonen før, går du rett videre.'
+            : 'Her lærer du stoffet du skal øve på i dag. Les én leksjon om gangen, i rekkefølge. Svar på spørsmålene underveis – de sjekker at du har forstått før du går videre.'}
         </p>
         {etterslep.length > 0 && (
           <p className="status-linje advar">

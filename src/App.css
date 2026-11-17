@@ -432,3 +432,19 @@ details.sjekk-boks summary { cursor: pointer; font-weight: 600; }
 .les-rad.lest .les-status { background: var(--gronn); color: var(--aksent-tekst); border-color: transparent; }
 .les-tekst { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 @media (max-width: 520px) { .leksjon-side { padding: 16px; } .md { font-size: 16px; } }
+
+/* ---------- Siste dag ---------- */
+.siste-dag-forklaring { margin: 0; }
+.siste-dag-liste { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+.siste-dag-liste li.ok { color: var(--dempet); text-decoration: line-through; }
+.siste-dag-liste li.neste-punkt { font-weight: 600; }
+
+/* ---------- Utskrift av huskearket ---------- */
+@media print {
+  .fokus-topp, .ikke-print, .bunnmeny, .sidemeny, .mobiltopp { display: none !important; }
+  body, .fokus, .fokus-main, .flate { background: #fff !important; color: #000 !important; box-shadow: none !important; border: 0 !important; }
+  .huskeark .flate { padding: 0 !important; }
+  .huskeark pre, .huskeark code { white-space: pre-wrap; color: #000 !important; background: #f3f3f3 !important; }
+  .huskeark .kodeblokk, .huskeark table { break-inside: avoid; }
+  .huskeark .md-h { break-after: avoid; }
+}

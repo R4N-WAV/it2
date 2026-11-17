@@ -4,7 +4,7 @@ import { Fremdrift, Ikon, shuffle } from './components';
 import { flashcards } from './data/flashcards';
 import { examTasks, oralQuestions, oralSims } from './data/exam';
 import { quiz } from './data/quiz';
-import { kmMatrise, plan, prioritetsrekkefolge, type PlanDay, type Steg } from './data/plan';
+import { SISTE_DAG_NOKKEL, erSisteDag, kmMatrise, plan, prioritetsrekkefolge, sisteDag, type PlanDay, type Steg } from './data/plan';
 import { kompetansemal, topics } from './data/topics';
 import { aktivDag, dagFremdrift, dagState, kalenderStatus, maalStatus, nesteSteg, stegFullfort } from './forlop';
 import { LaasSkjerm, erUlast, laas } from './Lock';
@@ -12,7 +12,7 @@ import { LaerOkt } from './Laer';
 import { KursSide, LeksjonLeser, LeksjonOppslag, LesOkt } from './Kurs';
 import { MatchSpill } from './Match';
 import { QuizOkt } from './QuizOkt';
-import { BeredskapKort, Diagnose, EksamenOppgave, Lagring, Sensorsporsmal, Simulering, SjekkSteg } from './sider';
+import { BeredskapKort, Diagnose, EksamenOppgave, Huskeark, Lagring, Sensorsporsmal, Simulering, SjekkSteg } from './sider';
 import {
   bekreftDag, beredskap, dagerIgjen, datoNokkel, fullforSteg, kortSomForfaller, mestringForTema, nyRunde,
   registrerDagEksamen, registrerDagstest, streak, svakhet, useData,
@@ -34,6 +34,7 @@ const MENY: { side: Side; navn: string; ikon: string; mobil: boolean }[] = [
 
 function lesHash(): { side: Side; dag: string | null } {
   const h = location.hash.slice(1);
+  if (h === SISTE_DAG_NOKKEL) return { side: 'plan', dag: SISTE_DAG_NOKKEL };
   const m = /^dag-(\d)$/.exec(h);
   if (m) {
     const p = plan.find((x) => x.dagNr === Number(m[1]));
@@ -44,11 +45,11 @@ function lesHash(): { side: Side; dag: string | null } {
 }
 
 const STEG_IKON: Record<Steg['type'], string> = {
-  les: 'bok', diagnose: 'mal', sjekk: 'sjekk', kort: 'kort', repetisjon: 'repeter', oppgaver: 'ov', svakheter: 'mal',
+  huskeark: 'kort', les: 'bok', diagnose: 'mal', sjekk: 'sjekk', kort: 'kort', repetisjon: 'repeter', oppgaver: 'ov', svakheter: 'mal',
   eksamen: 'eksamen', 'muntlig-spm': 'mikrofon', 'muntlig-sim': 'mikrofon', match: 'match', dagstest: 'stjerne',
 };
 const STEG_TYPE: Record<Steg['type'], string> = {
-  les: 'Les', diagnose: 'Diagnose', sjekk: 'Sjekkliste', kort: 'Lær kort', repetisjon: 'Repetisjon', oppgaver: 'Oppgaver', svakheter: 'Svakheter',
+  huskeark: 'Huskeark', les: 'Les', diagnose: 'Diagnose', sjekk: 'Sjekkliste', kort: 'Lær kort', repetisjon: 'Repetisjon', oppgaver: 'Oppgaver', svakheter: 'Svakheter',
   eksamen: 'Eksamensoppgave', 'muntlig-spm': 'Muntlig', 'muntlig-sim': 'Muntlig simulering', match: 'Match', dagstest: 'Dagstest',
 };
 
@@ -75,7 +76,8 @@ function startSteg(apne: Apne, d: AppData, dag: PlanDay, steg: Steg) {
   const testIds = dag.steg.find((s) => s.type === 'dagstest')?.ids ?? [];
   apne(steg.tittel, (lukk) => {
     switch (steg.type) {
-      case 'les': return <LesOkt dagNr={dag.dagNr} onFerdig={ferdig(lukk)} onAvslutt={lukk} />;
+      case 'huskeark': return <Huskeark onFerdig={ferdig(lukk)} onAvslutt={lukk} />;
+      case 'les': return <LesOkt dagNr={dag.dagNr} ids={steg.leksjoner} onFerdig={ferdig(lukk)} onAvslutt={lukk} />;
       case 'diagnose': return <Diagnose onFerdig={ferdig(lukk)} onAvslutt={lukk} />;
       case 'sjekk': return <SjekkSteg instruks={steg.instruks ?? []} onFerdig={ferdig(lukk)} onAvslutt={lukk} />;
       case 'kort': return <LaerOkt kort={flashcards.filter((k) => steg.temaer?.includes(k.tema))} onFerdig={ferdig(lukk)} onAvslutt={lukk} />;
@@ -84,7 +86,7 @@ function startSteg(apne: Apne, d: AppData, dag: PlanDay, steg: Steg) {
         if (k.length === 0) return <TomtSteg tekst="Ingen kort trenger repetisjon akkurat nå. Bra jobba!" onFerdig={ferdig(lukk)} />;
         return <LaerOkt kort={k} onFerdig={ferdig(lukk)} onAvslutt={lukk} />;
       }
-      case 'oppgaver': return <QuizOkt items={oppgaverFor(steg.temaer ?? [], testIds)} modus="ov" onFerdig={ferdig(lukk)} onAvslutt={lukk} />;
+      case 'oppgaver': return <QuizOkt items={steg.ids ? steg.ids.map((id) => quiz.find((q) => q.id === id)!).filter(Boolean) : oppgaverFor(steg.temaer ?? [], testIds)} modus="ov" onFerdig={ferdig(lukk)} onAvslutt={lukk} />;
       case 'svakheter': {
         const items = svakhetsOppgaver(d);
         if (items.length === 0) return <TomtSteg tekst="Ingen tydelige svakheter registrert. Ta en blandet øvingsøkt i «Øv» i stedet." onFerdig={ferdig(lukk)} />;
@@ -135,7 +137,7 @@ function Hoved() {
   }, []);
 
   const gaTil = (side: Side, dag?: string) => {
-    const h = dag ? `dag-${plan.find((p) => p.dato === dag)!.dagNr}` : side;
+    const h = dag === SISTE_DAG_NOKKEL ? SISTE_DAG_NOKKEL : dag ? `dag-${plan.find((p) => p.dato === dag)!.dagNr}` : side;
     if (location.hash.slice(1) === h) setRute(lesHash()); else location.hash = h;
     setFokus(null);
     window.scrollTo(0, 0);
@@ -202,7 +204,7 @@ function Hoved() {
           apneLeksjon={(l) => apne(l.tittel, (lukk) => <LeksjonLeser leksjon={l} onFerdig={lukk} onAvslutt={lukk} />)}
           apneOppslag={(l) => apne(l.tittel, (lukk) => <LeksjonOppslag leksjon={l} onLukk={lukk} />)} />}
         {rute.side === 'plan' && (rute.dag
-          ? <DagSide d={d} dag={plan.find((p) => p.dato === rute.dag)!} apne={apne} gaTil={gaTil} />
+          ? <DagSide d={d} dag={plan.find((p) => p.dato === rute.dag) ?? sisteDag} apne={apne} gaTil={gaTil} />
           : <PlanSide d={d} gaTil={gaTil} />)}
         {rute.side === 'ov' && <OvSide d={d} apne={apne} />}
         {rute.side === 'eksamen' && <EksamenSide d={d} apne={apne} />}
@@ -224,6 +226,7 @@ function Hoved() {
 
 /* ======================= I DAG ======================= */
 function IDag({ d, apne, gaTil }: { d: AppData; apne: Apne; gaTil: (s: Side, dag?: string) => void }) {
+  if (erSisteDag(datoNokkel())) return <SisteDag d={d} apne={apne} gaTil={gaTil} />;
   const dag = aktivDag(d);
   const g = dagState(d, dag.dato);
   const neste = nesteSteg(d, dag);
@@ -302,6 +305,95 @@ function IDag({ d, apne, gaTil }: { d: AppData; apne: Apne; gaTil: (s: Side, dag
   );
 }
 
+/* ======================= SISTE DAG ======================= */
+function SisteDag({ d, apne, gaTil }: { d: AppData; apne: Apne; gaTil: (s: Side, dag?: string) => void }) {
+  const dag = sisteDag;
+  const neste = nesteSteg(d, dag);
+  const fr = dagFremdrift(d, dag);
+  const eksamensdag = datoNokkel() === '2026-11-18';
+  const kjerne = dag.steg.filter((s) => !s.valgfri);
+  const kjerneMin = kjerne.filter((s) => !stegFullfort(d, dag, s)).reduce((a, s) => a + s.minutter, 0);
+  const forfalt = kortSomForfaller(d).length;
+  const apneHuskeark = () => apne('Huskeark', (lukk) => <Huskeark onAvslutt={lukk} />);
+
+  if (eksamensdag) {
+    return (
+      <div className="stack">
+        <section className="helt" aria-labelledby="neste-tittel">
+          <p className="etikett lys">Eksamensdag · REA3049 kl. 09:00–14:00</p>
+          <h1 id="neste-tittel">Lykke til i dag!</h1>
+          <p>Ikke lær noe nytt nå. Les huskearket én gang, spis frokost og møt i god tid. Les hele settet først og ta de sikre oppgavene først.</p>
+          <div className="neste">
+            <div className="neste-info">
+              <span className="neste-ikon"><Ikon navn="kort" /></span>
+              <div><p className="etikett lys">10 min</p><p className="neste-tittel">Les huskearket</p></div>
+            </div>
+            <button className="knapp stor lys-knapp" onClick={apneHuskeark}><Ikon navn="spill" /> Åpne</button>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  return (
+    <div className="stack">
+      <section className="helt" aria-labelledby="neste-tittel">
+        <p className="etikett lys">Eksamen i morgen kl. 09:00 · siste dag-plan</p>
+        <h1 id="neste-tittel">Siste dag før eksamen</h1>
+        <p className="siste-dag-forklaring">Den vanlige planen er satt på pause. Her er bare det som gir flest poeng i morgen, i rekkefølge. Stopper du halvveis, har du likevel gjort det viktigste.</p>
+        <div className="helt-fremdrift">
+          <Fremdrift verdi={fr.totalt ? fr.ferdig / fr.totalt : 0} />
+          <span>{fr.ferdig} av {fr.totalt} steg{kjerneMin > 0 ? ` · ca. ${Math.floor(kjerneMin / 60) > 0 ? `${Math.floor(kjerneMin / 60)} t ` : ''}${kjerneMin % 60} min igjen` : ''}</span>
+        </div>
+        {neste && !(fr.alleKravFerdig && neste.valgfri) ? (
+          <div className="neste">
+            <div className="neste-info">
+              <span className="neste-ikon"><Ikon navn={STEG_IKON[neste.type]} /></span>
+              <div>
+                <p className="etikett lys">Neste steg · ca. {neste.minutter} min</p>
+                <p className="neste-tittel">{neste.tittel}</p>
+              </div>
+            </div>
+            <button className="knapp stor lys-knapp" onClick={() => startSteg(apne, d, dag, neste)}><Ikon navn="spill" /> Start</button>
+          </div>
+        ) : (
+          <div className="neste">
+            <div className="neste-info">
+              <span className="neste-ikon"><Ikon navn="mal" /></span>
+              <div>
+                <p className="etikett lys">Kjernen er gjort – bra jobba!</p>
+                <p className="neste-tittel">Ta ekstra-stegene hvis du har energi, ellers: hvil</p>
+              </div>
+            </div>
+            <button className="knapp stor lys-knapp" onClick={() => gaTil('plan', SISTE_DAG_NOKKEL)}>Åpne planen</button>
+          </div>
+        )}
+        <button className="lenkeknapp lys" onClick={() => gaTil('plan', SISTE_DAG_NOKKEL)}>Se alle stegene →</button>
+      </section>
+
+      <div className="fliser">
+        <button className="flis" onClick={apneHuskeark}><Ikon navn="kort" /><b>Huskeark</b><span>alt viktig på én side</span></button>
+        <button className="flis" onClick={() => forfalt > 0 && apne('Repetisjon', (lukk) => <LaerOkt kort={forfalteKort(d)} onFerdig={lukk} onAvslutt={lukk} />)} disabled={forfalt === 0}>
+          <Ikon navn="repeter" /><b className="tall">{forfalt}</b><span>kort til repetisjon</span>
+        </button>
+        <div className="flis"><Ikon navn="eksamen" /><b className="tall">1</b><span>dag til skriftlig</span></div>
+      </div>
+
+      <section className="flate" aria-labelledby="kjerne-tittel">
+        <h2 id="kjerne-tittel" className="seksjon-tittel">Kjernen i dag</h2>
+        <ol className="siste-dag-liste">
+          {kjerne.map((s) => (
+            <li key={s.id} className={stegFullfort(d, dag, s) ? 'ok' : neste?.id === s.id ? 'neste-punkt' : ''}>
+              {s.tittel} <span className="liten dempet">· {s.minutter} min</span>
+            </li>
+          ))}
+        </ol>
+        <p className="liten dempet">Prioritert etter hvor ofte temaet kommer på eksamen og hvor raskt det læres: drøfting og pseudokode er med i alle sju tidligere sett, OOP i seks.</p>
+      </section>
+    </div>
+  );
+}
+
 /* ======================= PLAN ======================= */
 function PlanSide({ d, gaTil }: { d: AppData; gaTil: (s: Side, dag?: string) => void }) {
   const aktiv = aktivDag(d);
@@ -312,6 +404,15 @@ function PlanSide({ d, gaTil }: { d: AppData; gaTil: (s: Side, dag?: string) => 
         <p className="dempet">9.–17. november. Hver dag starter med at du <b>leser</b> dagens leksjoner, og deretter øver du på det du har lest. Stegene kommer i fast rekkefølge, og hver dag har et mål. Du kan ta en dag så mange ganger du vil, og bekrefter den når du føler at du forstår den.</p>
         <p className="liten"><span className="chip">minimum</span> = dagen er med i minimumsplanen. Steg merket «ekstra» hører til den optimale planen.</p>
       </div>
+      <button className="dagkort aktiv" onClick={() => gaTil('plan', SISTE_DAG_NOKKEL)}>
+        <span className="dagnr"><Ikon navn="flamme" /></span>
+        <span className="dagkort-tekst">
+          <span className="etikett">Komprimert plan · {sisteDag.tid}</span>
+          <b>{sisteDag.tittel}</b>
+          <span className="merker"><span className="chip aksent">for deg som ligger bak</span><span className="chip">{dagFremdrift(d, sisteDag).ferdig}/{dagFremdrift(d, sisteDag).totalt} steg</span></span>
+        </span>
+        <Ikon navn="pil" />
+      </button>
       {plan.map((p) => {
         const g = dagState(d, p.dato);
         const fr = dagFremdrift(d, p);
@@ -354,9 +455,9 @@ function DagSide({ d, dag, apne, gaTil }: { d: AppData; dag: PlanDay; apne: Apne
 
   return (
     <div className="stack">
-      <button className="lenkeknapp tilbake" onClick={() => gaTil('plan')}><Ikon navn="tilbake" /> Studieplan</button>
+      <button className="lenkeknapp tilbake" onClick={() => gaTil(dag === sisteDag ? 'idag' : 'plan')}><Ikon navn="tilbake" /> {dag === sisteDag ? 'I dag' : 'Studieplan'}</button>
       <div className="side-topp">
-        <p className="etikett">Dag {dag.dagNr} · {dag.ukedag} {Number(dag.dato.slice(8))}. nov · {dag.tid}{g.runde > 1 ? ` · runde ${g.runde}` : ''}</p>
+        <p className="etikett">{dag === sisteDag ? `Siste dag · ${dag.tid}` : `Dag ${dag.dagNr} · ${dag.ukedag} ${Number(dag.dato.slice(8))}. nov · ${dag.tid}`}{g.runde > 1 ? ` · runde ${g.runde}` : ''}</p>
         <h1>{dag.tittel}</h1>
         <p>{dag.mal}</p>
         {g.bekreftet && <p className="status-linje ok"><Ikon navn="sjekk" /> Du har bekreftet at du forstår denne dagen.</p>}
@@ -462,6 +563,9 @@ function OvSide({ d, apne }: { d: AppData; apne: Apne }) {
         </button>
         <button className="modus" onClick={() => apne('Blandet øving', (l) => <QuizOkt items={shuffle(quiz).slice(0, 10)} modus="ov" onFerdig={l} onAvslutt={l} />)}>
           <Ikon navn="ov" /><b>Blandet øving</b><span>10 oppgaver fra hele faget</span>
+        </button>
+        <button className="modus" onClick={() => apne('Huskeark', (l) => <Huskeark onAvslutt={l} />)}>
+          <Ikon navn="kort" /><b>Huskeark</b><span>Det viktigste på én side – kan skrives ut</span>
         </button>
         <button className="modus" onClick={() => apne('Diagnostisk test', (l) => <Diagnose onFerdig={l} onAvslutt={l} />)}>
           <Ikon navn="stjerne" /><b>Diagnostisk test</b><span>{d.diagnose ? 'Ta den på nytt' : '15 min – start her'}</span>

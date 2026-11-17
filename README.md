@@ -10,6 +10,8 @@ Studieperiode 9.–17. november 2026.
 - **Lær** er et kurs fra null: 24 leksjoner du leser side for side, med forklaringer, kodeeksempler (Java og
   pseudokode) og kontrollspørsmål du må svare på før du går videre. Hver studiedag starter med dagens leksjoner –
   først lærer du, så øver du. Uleste leksjoner fra tidligere dager tas automatisk først.
+- **Siste dag** (17.–18. november): «I dag» bytter til en komprimert plan på ca. 3 timer for deg som ligger bak, sortert
+  etter poeng per minutt, og et utskrivbart **huskeark** med det viktigste fra hele faget (også under «Øv»).
 - **I dag** viser hvor du er i planen og nøyaktig hva du skal gjøre som neste steg.
 - **Studieplan** med 9 dager. Hver dag har steg i fast rekkefølge, mål for mestring, og kan tas så mange ganger du vil
   («runder») til du bekrefter at du forstår den.

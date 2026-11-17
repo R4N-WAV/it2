@@ -5,6 +5,8 @@ import { diagnoseIds, quiz } from './data/quiz';
 import { topicNavn } from './data/topics';
 import { eksporter, importer, lagreDiagnose, nullstill, registrerEksamen, useData, vurderMuntlig } from './store';
 import type { ExamTask, OralSim, Rating } from './types';
+import { Md } from './Md';
+import huskearkTekst from './huskeark.md?raw';
 
 /* ======================= DIAGNOSE ======================= */
 export function Diagnose({ onFerdig, onAvslutt }: { onFerdig: () => void; onAvslutt: () => void }) {
@@ -418,6 +420,26 @@ export function Lagring() {
             </div>
           </>
         )}
+      </div>
+    </div>
+  );
+}
+
+/* ======================= HUSKEARK ======================= */
+export function Huskeark({ onFerdig, onAvslutt }: { onFerdig?: () => void; onAvslutt: () => void }) {
+  return (
+    <div className="fokus-innhold huskeark">
+      <div className="flate">
+        <h2>Huskeark – IT2 skriftlig</h2>
+        <p className="dempet ikke-print">Det viktigste fra hele faget på én side. Les det nå, og les det igjen i morgen tidlig. Er egne notater tillatt på eksamen, skriver du det ut (eller lagrer som PDF) – internett er ikke tilgjengelig der.</p>
+        <div className="rad ikke-print">
+          <button className="knapp sek" onClick={() => window.print()}><Ikon navn="bok" /> Skriv ut / lagre som PDF</button>
+        </div>
+        <Md tekst={huskearkTekst} />
+      </div>
+      <div className="rad ikke-print">
+        {onFerdig && <button className="knapp stor" onClick={onFerdig}><Ikon navn="sjekk" /> Lest – gå videre</button>}
+        <button className="lenkeknapp" onClick={onAvslutt}>Lukk</button>
       </div>
     </div>
   );
