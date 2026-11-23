@@ -1,49 +1,46 @@
-# IT2 Eksamenstrener
+# IT2 REA3050-trener
 
-Personlig øvingsapp for **Informasjonsteknologi 2**: REA3049 (skriftlig, Java/DIV) og REA3050 (muntlig-praktisk).
-Studieperiode 9.–17. november 2026.
+Personlig opplæringssystem for **IT2 muntlig-praktisk eksamen (REA3050)**, mandag 30. november 2026.
+Studieperiode 23.–29. november. Standardoppsettet følger Oslo Privatistkontors retningslinjer (H26) –
+informasjonsskrivet i Privatistportalen har alltid forrang.
 
 **Åpne appen:** https://r4n-wav.github.io/it2/ (krever PIN-kode)
 
 ## Hva appen gjør
 
-- **Lær** er et kurs fra null: 24 leksjoner du leser side for side, med forklaringer, kodeeksempler (Java og
-  pseudokode) og kontrollspørsmål du må svare på før du går videre. Hver studiedag starter med dagens leksjoner –
-  først lærer du, så øver du. Uleste leksjoner fra tidligere dager tas automatisk først.
-- **Siste dag** (17.–18. november): «I dag» bytter til en komprimert plan på ca. 3 timer for deg som ligger bak, sortert
-  etter poeng per minutt, og et utskrivbart **huskeark** med det viktigste fra hele faget (også under «Øv»).
-- **I dag** viser hvor du er i planen og nøyaktig hva du skal gjøre som neste steg.
-- **Studieplan** med 9 dager. Hver dag har steg i fast rekkefølge, mål for mestring, og kan tas så mange ganger du vil
-  («runder») til du bekrefter at du forstår den.
-- **Lær-modus for flashcards** etter Quizlet-modellen: runder på 7 kort, «hopp over», kort du bommer på kommer tilbake
-  (som flervalg), og økten er ferdig først når alle kort er mestret minst én gang. Leitner-repetisjon i bakgrunnen.
-- **Match**: koble begreper og forklaringer på tid, med rekord.
-- **Oppgaver** (forutsi utskrift, finn feil, sorter pseudokode, skriv kode), **dagstester** med krav,
-  **eksamensmodus** med tidtaker og **muntlig simulering** (forberedelse → eksaminasjon → ukjent tilleggsoppgave).
-- **Fremdrift** som måler reell kunnskap per tema og per kompetansemål.
+- **I dag – «Er jeg klar?»**: dager igjen, dagens plan og neste blokk, status per kompetansemål (bare vurderte svar
+  teller – «lest» teller ikke som mestring), gjentakende feil, repetisjon som forfaller, siste simulering og en streng
+  beredskapskontroll med åtte vilkår og konkret prioritering.
+- **Plan**: dag-for-dag-planen 23.–29.11 fra fagstoffpakken, koblet til øktene, med 90-minutters kortversjon og
+  eksamensdag-sjekkliste.
+- **Les**: hele fagstoffpakken ordrett, delt i kapitler/delkapitler med innholdsfortegnelse, fordypning, kodeblokker med
+  kopiknapp og UML-/flytdiagrammer. Hvert kapittel har i tillegg læringsmål, flere eksempler, gjennomarbeidet eksempel,
+  praktisk demonstrasjon, muntlig modellforklaring, sensoroppfølging, oppgaver på tre nivåer med låste løsningsforslag,
+  vanlige feil og huskeliste. «Forklar med egne ord» etter hvert delkapittel og kapittelkontroll til slutt.
+- **Muntlig**: sensorsamtale ett spørsmål om gangen, snakketimer, begrepssjekk, hint og nytt forsøk ved svakt svar,
+  eksempelsvar først etter forsøk, rubrikk 0–4 på sju dimensjoner og oppfølgingsspørsmål.
+- **Verksted**: praktiske mikrooppgaver, feilsøking/kodeforståelse (noen med automatisk sjekk) og hele caser.
+- **Simulator**: trekk én av 8 originale caser, 30 min forberedelse med notatark, startforklaring eller fagsamtale,
+  praktisk demonstrasjon, ukjent tilleggsoppgave fra andre mål, rubrikkvurdering og neste økt fra svakhetene.
+- **Oppgavebank** (87 muntlige, 31 praktiske, 21 feilsøking, 8 caser, 13 tilleggsoppgaver, 15 drøftinger) og **feillogg**.
 
-## Fremdrift og enheter
+Rubrikken er en intern treningsrubrikk, ikke Udirs sensorveiledning. Ingen app kan garantere en karakter.
+Casene er originale treningsoppgaver – Oslo publiserer ikke tidligere muntlige oppgaver.
 
-Fremdriften lagres i nettleseren (localStorage) på enheten du bruker. Den synkroniseres **ikke** automatisk mellom
-enheter. Bruk *Innstillinger → Last ned fremdrift / Importer* for å flytte den.
+## Offline og fremdrift
 
-## PIN-lås
-
-Appen ber om en firesifret PIN-kode. Den holder tilfeldige besøkende og roboter ute, men er ikke ekte sikkerhet:
-siden er statisk og koden ligger i et offentlig repo (bare en SHA-256-hash av PIN-koden er lagret).
+Alt innhold ligger lokalt i appen, og en service worker gjør at den virker uten nett etter første besøk. Fremdriften
+lagres i nettleseren (localStorage) og synkroniseres ikke mellom enheter – bruk *Innstillinger → Last ned / Importer*.
 
 ## Utvikling
 
 ```bash
 npm install
-npm run dev      # utviklingsserver
-npm test         # tester (innhold, Leitner, dagsforløp)
+npm run dev      # utviklingsserver (legg til ?dato=2026-11-25 for å simulere en dag)
+npm test         # tester: pensum, oppgavebanker, plan, vurderingsmotor
 npm run build    # produksjonsbygg til dist/
 ```
 
-Hver push til `main` bygges, testes og publiseres automatisk til GitHub Pages (`.github/workflows/deploy.yml`).
-
-Innhold: `src/leksjoner/` (leksjonene som Markdown – formatet er beskrevet øverst i `src/kurs.ts`) og `src/data/`
-(flashcards, oppgaver, eksamensoppgaver, studieplan, begreper).
-Kode i oppgavene er Java; algoritmer også i pseudokode. Eksamensoppgavene er egne øvingsoppgaver laget etter
-oppgavetypene i settene 2023–2026, ikke kopier av originalene.
+Innhold: `src/fagstoff/` (fagstoffpakken ordrett + tilleggsstoff per kapittel) og `src/rea/data/` (oppgavebanker, plan,
+kompetansemål). Logikk: `src/rea/pensum.ts` (deler opp fagstoffet), `src/rea/vurdering.ts` (rubrikk, repetisjon,
+beredskap). Den tidligere REA3049-versjonen (Java) finnes i git-historikken.

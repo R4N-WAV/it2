@@ -5,4 +5,5 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   base: './',
   plugins: [react()],
+  build: { chunkSizeWarningLimit: 2000 }, // alt innhold i én pakke = virker offline uten ekstra nedlastinger
 });
