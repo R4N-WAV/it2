@@ -117,3 +117,9 @@
 .begrepsliste li { break-inside: avoid; margin-bottom: 6px; }
 .tekst { overflow-wrap: anywhere; }
 pre.tekst { font-family: var(--font-body); margin: 0; }
+
+/* ---------- Synkronisering ---------- */
+.synk-merke { cursor: pointer; align-self: flex-start; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mobiltopp-dager { display: inline-flex; align-items: center; gap: 4px; min-width: 0; }
+.mobiltopp-dager .synk-merke { font-size: 11px; padding: 1px 7px; }
+.synk-paminnelse { border-color: var(--gul); background: var(--gul-svak); }

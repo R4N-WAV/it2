@@ -1,5 +1,5 @@
 /* Offline-støtte: appen og alt innhold caches ved første besøk, slik at leksjoner og oppgaver virker uten nett. */
-const CACHE = 'it2-rea3050-v1';
+const CACHE = 'it2-rea3050-v2';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', './index.html', './favicon.svg'])).then(() => self.skipWaiting()));

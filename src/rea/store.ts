@@ -3,11 +3,11 @@ import { DIMENSJONER } from './data/km';
 import type { AktivSim, AppData, Feil, KmId, SimResultat, Vurdering } from './typer';
 import { datoNokkel, nesteRep } from './vurdering';
 
-/* Fremdrift lagres lokalt i nettleseren (localStorage). Ingen konto, ingen server. */
+/* Fremdrift lagres lokalt i nettleseren (localStorage) og synkroniseres valgfritt mellom enheter (se synk.ts). */
 export const NOKKEL = 'it2-rea3050-v2';
 
 export function tomData(): AppData {
-  return { versjon: 2, lest: {}, forklart: {}, oppgaver: {}, vurderinger: [], rep: {}, sims: [], aktivSim: null, feillogg: [], plan: {}, kortversjon: {}, diagnose: null, aktivitet: [] };
+  return { versjon: 2, lest: {}, forklart: {}, oppgaver: {}, vurderinger: [], rep: {}, sims: [], aktivSim: null, feillogg: [], plan: {}, kortversjon: {}, diagnose: null, aktivitet: [], slettet: {}, planTid: {} };
 }
 
 function last(): AppData {
@@ -21,14 +21,27 @@ function last(): AppData {
 
 let data: AppData = typeof localStorage === 'undefined' ? tomData() : last();
 const lyttere = new Set<() => void>();
+const endringsLyttere = new Set<() => void>();
 
-function lagre(ny: AppData, aktivitet = true) {
-  const i = datoNokkel();
-  if (aktivitet && !ny.aktivitet.includes(i)) ny = { ...ny, aktivitet: [...ny.aktivitet, i] };
+function skriv(ny: AppData) {
   data = ny;
   try { localStorage.setItem(NOKKEL, JSON.stringify(data)); } catch { /* privat modus o.l. */ }
   lyttere.forEach((l) => l());
 }
+
+function lagre(ny: AppData, aktivitet = true) {
+  const i = datoNokkel();
+  if (aktivitet && !ny.aktivitet.includes(i)) ny = { ...ny, aktivitet: [...ny.aktivitet, i] };
+  skriv(ny);
+  endringsLyttere.forEach((l) => l());
+}
+
+/** Kalles av synkroniseringen når data fra andre enheter er slått sammen inn. Utløser ikke ny opplasting. */
+export function erstattFraSynk(ny: AppData) { skriv(ny); }
+/** Varsles ved hver lokal endring (brukes til å laste opp til synkroniseringen). */
+export function vedEndring(cb: () => void) { endringsLyttere.add(cb); return () => { endringsLyttere.delete(cb); }; }
+
+const gravstein = (nokkel: string) => ({ ...(data.slettet ?? {}), [nokkel]: Date.now() });
 
 export const hent = () => data;
 
@@ -39,8 +52,9 @@ export function useData(): AppData {
 /* ---------- Lesing ---------- */
 export function markerLest(seksjonId: string, lest = true) {
   const l = { ...data.lest };
-  if (lest) l[seksjonId] = Date.now(); else delete l[seksjonId];
-  lagre({ ...data, lest: l });
+  if (lest) { l[seksjonId] = Date.now(); lagre({ ...data, lest: l }); return; }
+  delete l[seksjonId];
+  lagre({ ...data, lest: l, slettet: gravstein(`lest:${seksjonId}`) });
 }
 export function lagreForklart(seksjonId: string, tekst: string, dekning: number) {
   lagre({ ...data, forklart: { ...data.forklart, [seksjonId]: { tekst, dekning, tid: Date.now() } } });
@@ -74,17 +88,19 @@ export function leggTilFeil(tekst: string, km: KmId[]) {
   lagre({ ...data, feillogg: [...data.feillogg, { id: `manuell-${Date.now()}`, tid: Date.now(), km, tekst, auto: false, lost: false }] });
 }
 export function settFeilLost(id: string, lost: boolean) {
-  lagre({ ...data, feillogg: data.feillogg.map((f) => (f.id === id ? { ...f, lost } : f)) });
+  lagre({ ...data, feillogg: data.feillogg.map((f) => (f.id === id ? { ...f, lost, endret: Date.now() } : f)) });
 }
 export function slettFeil(id: string) {
-  lagre({ ...data, feillogg: data.feillogg.filter((f) => f.id !== id) });
+  lagre({ ...data, feillogg: data.feillogg.filter((f) => f.id !== id), slettet: gravstein(`feil:${id}`) });
 }
 
 /* ---------- Plan ---------- */
 export function settBlokk(dato: string, blokkId: string, ferdig: boolean) {
   const g = data.plan[dato] ?? [];
   const ny = ferdig ? [...new Set([...g, blokkId])] : g.filter((x) => x !== blokkId);
-  lagre({ ...data, plan: { ...data.plan, [dato]: ny } });
+  const plan = { ...data.plan, [dato]: ny };
+  if (ferdig) lagre({ ...data, plan, planTid: { ...(data.planTid ?? {}), [`${dato}:${blokkId}`]: Date.now() } });
+  else lagre({ ...data, plan, slettet: gravstein(`plan:${dato}:${blokkId}`) });
 }
 export function settKortversjon(dato: string, paa: boolean) {
   lagre({ ...data, kortversjon: { ...data.kortversjon, [dato]: paa } });
@@ -119,7 +135,7 @@ export function importer(json: string): string | null {
     return 'Kunne ikke lese JSON-filen.';
   }
 }
-export function nullstill() { lagre(tomData(), false); }
+export function nullstill() { lagre({ ...tomData(), nullstilt: Date.now() }, false); }
 
 /** Kun for tester. */
 export function _settData(d: AppData) { data = d; }

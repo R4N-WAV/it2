@@ -10,6 +10,7 @@ import {
   dagerTilEksamen, type Apne, type Side,
 } from './rea/sider';
 import { useData } from './rea/store';
+import { SynkMerke } from './rea/SynkOppsett';
 import { forfalteRep } from './rea/vurdering';
 import { useTema, type Tema } from './theme';
 
@@ -121,6 +122,7 @@ function Hoved() {
           ))}
         </nav>
         <div className="sidemeny-bunn">
+          <SynkMerke onKlikk={() => gaTil('innstillinger', 'synk')} />
           <div className="nedtelling"><b className="tall">{igjen}</b> dager til REA3050<br /><span className="liten">mandag 30. november</span></div>
           <div className="rad">{temaKnapp}<button className="ikonknapp" onClick={laas} aria-label="Lås appen" title="Lås appen"><Ikon navn="laas" /></button></div>
         </div>
@@ -128,7 +130,7 @@ function Hoved() {
 
       <header className="mobiltopp">
         <span className="logo">IT2</span>
-        <span className="mobiltopp-dager"><b className="tall">{igjen}</b> dager til REA3050</span>
+        <span className="mobiltopp-dager"><b className="tall">{igjen}</b> dager · <SynkMerke onKlikk={() => gaTil('innstillinger', 'synk')} /></span>
         <span className="mobiltopp-knapper">{temaKnapp}
           <button className="ikonknapp" onClick={() => gaTil('mer')} aria-label="Mer: oppgavebank, feillogg, eksamensinfo, innstillinger"><Ikon navn="innstillinger" /></button></span>
       </header>

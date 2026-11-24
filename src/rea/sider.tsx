@@ -14,6 +14,7 @@ import {
   eksporter, importer, leggTilFeil, lagreForklart, markerLest, nullstill, settBlokk, settFeilLost, settKortversjon, slettFeil,
 } from './store';
 import { Inline, Md, nokkelbegreper } from './Tekst';
+import { SynkOppsett, SynkPaminnelse } from './SynkOppsett';
 import type { AppData, KmId } from './typer';
 import { beredskap, datoNokkel, forfalteRep, gjentakendeFeil, mestring } from './vurdering';
 
@@ -104,6 +105,7 @@ export function Dashboard({ d, apne, gaTil }: { d: AppData; apne: Apne; gaTil: G
 
   return (
     <div className="stack">
+      <SynkPaminnelse onOppsett={() => gaTil('innstillinger', 'synk')} />
       {dag === 'eksamen' ? <EksamensdagKort /> : dag ? <DagensHelt dag={dag} d={d} apne={apne} gaTil={gaTil} igjen={igjen} /> : (
         <section className="helt"><h1>Eksamensdagen er passert</h1><p>Appen kan fortsatt brukes til repetisjon.</p></section>
       )}
@@ -622,9 +624,10 @@ export function Innstillinger({ temaKnapper, onLaas }: { temaKnapper: ReactNode;
     <div className="stack">
       <h1>Innstillinger</h1>
       <section className="flate"><h2>Utseende</h2>{temaKnapper}</section>
+      <SynkOppsett />
       <section className="flate">
-        <h2>Fremdrift</h2>
-        <p className="liten">Alt lagres lokalt i denne nettleseren (ingen konto, ingen server). Bruk eksport/import for å flytte mellom PC og mobil.</p>
+        <h2>Sikkerhetskopi</h2>
+        <p className="liten">Fremdriften lagres i nettleseren og – hvis synkronisering er satt opp – i Gisten din. Du kan også ta en manuell kopi som fil.</p>
         <div className="rad">
           <button className="knapp" onClick={last}>Last ned fremdrift (JSON)</button>
           <label className="knapp sek">Importer fra fil<input type="file" accept="application/json,.json" hidden onChange={async (e) => {
@@ -633,7 +636,7 @@ export function Innstillinger({ temaKnapper, onLaas }: { temaKnapper: ReactNode;
             const feil = importer(await f.text());
             setMelding(feil ?? 'Fremdriften er importert.');
           }} /></label>
-          <button className="knapp rod" onClick={() => { if (confirm('Slette all fremdrift på denne enheten? Dette kan ikke angres.')) { nullstill(); setMelding('Fremdriften er nullstilt.'); } }}>Nullstill</button>
+          <button className="knapp rod" onClick={() => { if (confirm('Slette all fremdrift? Er synkronisering på, nullstilles den på ALLE enhetene dine. Dette kan ikke angres.')) { nullstill(); setMelding('Fremdriften er nullstilt.'); } }}>Nullstill</button>
         </div>
         {melding && <p className="melding">{melding}</p>}
       </section>

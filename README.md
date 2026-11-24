@@ -27,10 +27,15 @@ informasjonsskrivet i Privatistportalen har alltid forrang.
 Rubrikken er en intern treningsrubrikk, ikke Udirs sensorveiledning. Ingen app kan garantere en karakter.
 Casene er originale treningsoppgaver – Oslo publiserer ikke tidligere muntlige oppgaver.
 
-## Offline og fremdrift
+## Offline, fremdrift og synkronisering
 
 Alt innhold ligger lokalt i appen, og en service worker gjør at den virker uten nett etter første besøk. Fremdriften
-lagres i nettleseren (localStorage) og synkroniseres ikke mellom enheter – bruk *Innstillinger → Last ned / Importer*.
+lagres i nettleseren (localStorage).
+
+**Synk mellom enheter** (én bruker): *Innstillinger → Synkronisering*. Lag en GitHub-token med bare `gist`-tilgang og
+lim den inn på hver enhet. Fremdriften lagres i en privat Gist på din konto og synkes automatisk ved oppstart, når
+appen får fokus, noen sekunder etter hver endring og hvert 2. minutt. Endringer fra flere enheter (også offline)
+slås sammen uten at noe overskrives (`src/rea/synk.ts`). Manuell sikkerhetskopi som JSON finnes fortsatt.
 
 ## Utvikling
 

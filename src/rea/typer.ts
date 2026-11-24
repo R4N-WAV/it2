@@ -127,6 +127,7 @@ export interface Feil {
   tekst: string;
   auto: boolean;
   lost: boolean;
+  endret?: number; // sist status ble endret (for synkronisering)
 }
 
 export interface SimResultat {
@@ -179,4 +180,8 @@ export interface AppData {
   kortversjon: Record<string, boolean>; // dato -> bruker 90-minutters kortversjon
   diagnose: { tid: number; svar: Record<string, boolean>; usikker: string } | null;
   aktivitet: string[]; // datoer med aktivitet
+  /* Synkronisering mellom enheter */
+  slettet?: Record<string, number>; // «gravsteiner»: 'lest:id', 'plan:dato:id', 'feil:id' -> tidspunkt fjernet
+  planTid?: Record<string, number>; // 'dato:id' -> tidspunkt blokken ble krysset av
+  nullstilt?: number; // tidspunkt for siste nullstilling (nyeste nullstilling vinner på alle enheter)
 }
