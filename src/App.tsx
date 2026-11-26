@@ -13,13 +13,15 @@ import { useData } from './rea/store';
 import { SynkMerke } from './rea/SynkOppsett';
 import { forfalteRep } from './rea/vurdering';
 import { useTema, type Tema } from './theme';
+import { KodelabSide } from './rea/helg/Kodelab';
 
 const MENY: { side: Side; navn: string; ikon: string; mobil: boolean }[] = [
   { side: 'idag', navn: 'I dag', ikon: 'idag', mobil: true },
-  { side: 'plan', navn: 'Plan', ikon: 'plan', mobil: true },
-  { side: 'les', navn: 'Les', ikon: 'bok', mobil: true },
-  { side: 'muntlig', navn: 'Muntlig', ikon: 'mikrofon', mobil: true },
-  { side: 'verksted', navn: 'Verksted', ikon: 'ov', mobil: true },
+  { side: 'plan', navn: 'Helgeplan', ikon: 'plan', mobil: true },
+  { side: 'kodelab', navn: 'Kodelab', ikon: 'kode', mobil: true },
+  { side: 'muntlig', navn: 'Muntlig sensor', ikon: 'mikrofon', mobil: true },
+  { side: 'les', navn: 'Les (oppslag)', ikon: 'bok', mobil: true },
+  { side: 'verksted', navn: 'Verksted', ikon: 'ov', mobil: false },
   { side: 'sim', navn: 'Simulator', ikon: 'eksamen', mobil: true },
   { side: 'bank', navn: 'Oppgavebank', ikon: 'kort', mobil: false },
   { side: 'feil', navn: 'Feillogg', ikon: 'advarsel', mobil: false },
@@ -93,6 +95,7 @@ function Hoved() {
   const side = (
     <>
       {rute.side === 'idag' && <Dashboard d={d} apne={apne} gaTil={gaTil} />}
+      {rute.side === 'kodelab' && <KodelabSide d={d} modus={rute.param} apne={apne} />}
       {rute.side === 'plan' && <PlanSide d={d} dato={rute.param} apne={apne} gaTil={gaTil} />}
       {rute.side === 'les' && (k ? <Leser key={k.id} k={k} d={d} apne={apne} gaTil={gaTil} /> : <LesBibliotek d={d} gaTil={gaTil} />)}
       {rute.side === 'muntlig' && <MuntligSide d={d} apne={apne} gaTil={gaTil} />}
@@ -132,7 +135,7 @@ function Hoved() {
         <span className="logo">IT2</span>
         <span className="mobiltopp-dager"><b className="tall">{igjen}</b> dager · <SynkMerke onKlikk={() => gaTil('innstillinger', 'synk')} /></span>
         <span className="mobiltopp-knapper">{temaKnapp}
-          <button className="ikonknapp" onClick={() => gaTil('mer')} aria-label="Mer: oppgavebank, feillogg, eksamensinfo, innstillinger"><Ikon navn="innstillinger" /></button></span>
+          <button className="ikonknapp" onClick={() => gaTil('mer')} aria-label="Mer: verksted, oppgavebank, feillogg, eksamensinfo, innstillinger"><Ikon navn="innstillinger" /></button></span>
       </header>
 
       <main className={`innhold ${k ? 'bred' : ''}`}>{side}</main>

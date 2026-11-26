@@ -16,9 +16,10 @@ import {
 import { Inline, Md, nokkelbegreper } from './Tekst';
 import { SynkOppsett, SynkPaminnelse } from './SynkOppsett';
 import type { AppData, KmId } from './typer';
+import { HelgBeredskap, HelgOkt } from './helg/Kodelab';
 import { beredskap, datoNokkel, forfalteRep, gjentakendeFeil, mestring } from './vurdering';
 
-export type Side = 'idag' | 'plan' | 'les' | 'verksted' | 'muntlig' | 'sim' | 'bank' | 'feil' | 'info' | 'innstillinger' | 'mer';
+export type Side = 'idag' | 'kodelab' | 'plan' | 'les' | 'verksted' | 'muntlig' | 'sim' | 'bank' | 'feil' | 'info' | 'innstillinger' | 'mer';
 export type Apne = (tittel: string, lag: (lukk: () => void) => ReactNode) => void;
 export type GaTil = (side: Side, param?: string) => void;
 
@@ -54,6 +55,7 @@ function muntligForKm(d: AppData, km: KmId[], n: number): SpmItem[] {
 export function startBlokk(blokk: Blokk, dag: Studiedag, d: AppData, apne: Apne, gaTil: GaTil) {
   const ferdig = (lukk: () => void) => () => { settBlokk(dag.dato, blokk.id, true); lukk(); };
   switch (blokk.type) {
+    case 'kodelab': return apne(blokk.tittel, (l) => <HelgOkt ids={blokk.helg ?? []} onFerdig={ferdig(l)} />);
     case 'diagnose': return apne('Diagnostisk kartlegging', (l) => <DiagnoseOkt onFerdig={ferdig(l)} />);
     case 'les': return gaTil('les', blokk.kapitler![0]);
     case 'muntlig':
@@ -68,7 +70,7 @@ export function startBlokk(blokk: Blokk, dag: Studiedag, d: AppData, apne: Apne,
     case 'case': return apne(blokk.tittel, (l) => <VelgCase ids={blokk.caser ?? []} ekstraPraktisk={blokk.praktisk} ekstraMuntlig={blokk.muntlig} onFerdig={ferdig(l)} apne={apne} />);
     case 'sim': return gaTil('sim');
     case 'repetisjon': return apne(blokk.tittel, (l) => <RepetisjonOkt d={d} ekstra={blokk.muntlig} onFerdig={ferdig(l)} />);
-    case 'svakheter': return apne('Svakhetsøkt', (l) => <SvakhetsOkt d={d} onFerdig={ferdig(l)} apne={apne} gaTil={gaTil} />);
+    case 'svakheter': return gaTil('kodelab', 'svak');
     case 'feillogg': settBlokk(dag.dato, blokk.id, true); return gaTil('feil');
     case 'beredskap': return apne(blokk.tittel, (l) => <BeredskapsSjekk onFerdig={ferdig(l)} />);
     default: return undefined;
@@ -110,7 +112,11 @@ export function Dashboard({ d, apne, gaTil }: { d: AppData; apne: Apne; gaTil: G
         <section className="helt"><h1>Eksamensdagen er passert</h1><p>Appen kan fortsatt brukes til repetisjon.</p></section>
       )}
 
-      <section className={`flate beredskap ${b.klar ? 'klar' : b.risiko === 'høy' ? 'hoy' : 'middels'}`} aria-labelledby="ber-tittel">
+      <HelgBeredskap d={d} apne={apne} />
+
+      <details className="flate">
+        <summary><b>Bredde per kompetansemål (sekundært)</b> – den gamle nivå 3–4-kontrollen</summary>
+      <section className={`beredskap ${b.klar ? 'klar' : b.risiko === 'høy' ? 'hoy' : 'middels'}`} aria-labelledby="ber-tittel">
         <div className="rad mellom">
           <h2 id="ber-tittel" className="seksjon-tittel"><Ikon navn={b.klar ? 'sjekk' : 'advarsel'} /> {b.klar ? 'Treningsklar – med sikkerhetsmargin' : 'Ikke eksamensklar ennå'}</h2>
           <span className={`chip ${b.klar ? 'ok' : b.risiko === 'høy' ? 'nei' : 'midt'}`}>Risiko: {b.risiko}</span>
@@ -121,6 +127,8 @@ export function Dashboard({ d, apne, gaTil }: { d: AppData; apne: Apne; gaTil: G
         {b.prioritet.length > 0 && <><h3>Prioriter nå</h3><ol className="liste">{b.prioritet.map((p, i) => <li key={i}>{p}</li>)}</ol></>}
         <p className="liten dempet">Ingen app kan garantere en karakter. «Klar» betyr at du har dokumentert nivå 3–4 på tvers av mål og i to simuleringer – ikke at eksamen er sikret.</p>
       </section>
+
+      </details>
 
       <div className="fliser">
         <button className="flis" disabled={!forfalt} onClick={() => apne('Repetisjon', (l) => <RepetisjonOkt d={d} onFerdig={l} />)}><Ikon navn="repeter" /><b className="tall">{forfalt}</b><span>repetisjoner forfaller</span></button>
@@ -173,10 +181,10 @@ function DagensHelt({ dag, d, apne, gaTil, igjen }: { dag: Studiedag; d: AppData
   const iDagDato = datoNokkel(iDag());
   return (
     <section className="helt" aria-labelledby="dag-tittel">
-      <p className="etikett lys">Dag {dag.nr} av 7 · {fmtDato(dag.dato)} · {igjen} {igjen === 1 ? 'dag' : 'dager'} til REA3050 (man. 30.11){dag.dato !== iDagDato && ' · planlagt dag'}</p>
+      <p className="etikett lys">Helgesprint dag {dag.nr} av 2 · {fmtDato(dag.dato)} · {igjen} {igjen === 1 ? 'dag' : 'dager'} til REA3050 (man. 30.11){dag.dato !== iDagDato && ' · planlagt dag'}</p>
       <h1 id="dag-tittel">{dag.tittel}</h1>
       <p className="helt-tekst">{dag.hovedmal}</p>
-      <div className="helt-fremdrift"><Fremdrift verdi={blokker.length ? blokker.filter((b) => ferdige.includes(b.id)).length / blokker.length : 0} /><span>{blokker.filter((b) => ferdige.includes(b.id)).length} av {blokker.length} blokker{kort && ' · kortversjon 90 min'}</span></div>
+      <div className="helt-fremdrift"><Fremdrift verdi={blokker.length ? blokker.filter((b) => ferdige.includes(b.id)).length / blokker.length : 0} /><span>{blokker.filter((b) => ferdige.includes(b.id)).length} av {blokker.length} blokker{kort && ' · 4-timers redningsplan'}</span></div>
       {neste ? (
         <div className="neste">
           <div className="neste-info"><span className="neste-ikon"><Ikon navn="spill" /></span>
@@ -206,7 +214,8 @@ export function PlanSide({ d, dato, apne, gaTil }: { d: AppData; dato?: string; 
   const original = delSeksjoner('DEL VI');
   return (
     <div className="stack">
-      <header className="side-topp"><p className="etikett">23.–29. november 2026</p><h1>Dag-for-dag-plan</h1></header>
+      <header className="side-topp"><p className="etikett">Lørdag 28. og søndag 29. november 2026 · eksamen mandag 30.</p><h1>Helgeplan</h1>
+        <p className="dempet">Den gamle planen 23.–27. november er fjernet. Klokkeslett er forslag – kryss av det du gjør. Planen er ingen garanti; rekker du bare deler, prioriter å skrive og forklare enkel kode.</p></header>
       <ol className="dagvelger">
         {STUDIEDAGER.map((x) => {
           const ferdig = (d.plan[x.dato] ?? []).length;
@@ -217,7 +226,7 @@ export function PlanSide({ d, dato, apne, gaTil }: { d: AppData; dato?: string; 
         <li><button className={`dagknapp ${!dag ? 'aktiv' : ''}`} onClick={() => gaTil('plan', EKSAMENSDATO)}><b>Man 30.</b><span>Eksamensdag</span></button></li>
       </ol>
       {!dag ? <EksamensdagKort /> : <DagVisning dag={dag} d={d} apne={apne} gaTil={gaTil} />}
-      <details className="flate"><summary><b>Fagstoffpakkens opprinnelige dagplan (ordrett)</b></summary>
+      <details className="flate"><summary><b>Fagstoffpakkens merknad om tidsplanen (ordrett)</b></summary>
         {original.map((s) => <div key={s.tittel}><h3>{s.tittel}</h3><Md tekst={s.tekst} /></div>)}</details>
     </div>
   );
@@ -235,7 +244,7 @@ function DagVisning({ dag, d, apne, gaTil }: { dag: Studiedag; d: AppData; apne:
         <p><b>Hovedmål:</b> {dag.hovedmal}</p>
         {dag.km.length > 0 && <KmMerker km={dag.km} />}
         <label className="sjekk"><input type="checkbox" checked={kort} onChange={() => settKortversjon(dag.dato, !kort)} />
-          <span><b>Kortversjon (90 min)</b> for dager med lav kapasitet. Blokkene som står igjen kan <b>ikke</b> hoppes over.</span></label>
+          <span><b>4-timers redningsplan</b> hvis du ikke har en hel dag. Blokkene som står igjen kan <b>ikke</b> hoppes over.</span></label>
       </div>
       <ol className="blokkliste">
         {vis.map((b) => b.type === 'pause' ? (
@@ -261,14 +270,16 @@ function DagVisning({ dag, d, apne, gaTil }: { dag: Studiedag; d: AppData; apne:
 }
 
 /* ======================= LES ======================= */
+const LES_GRUPPER = ['Eksamen, samfunn og etikk', 'Programmering og design', 'OOP og modellering', 'Testing og gjenbruk', 'Data, formater, nettverk og sikkerhet', 'Brukervennlighet, systemutvikling og muntlig formidling'];
 export function LesBibliotek({ d, gaTil }: { d: AppData; gaTil: GaTil }) {
   return (
     <div className="stack">
       <header className="side-topp"><p className="etikett">Lærebok · hele fagstoffpakken, offline</p><h1>Lær / Les</h1>
         <p className="dempet">Hvert kapittel har læringsmål, full fagtekst, fordypning, eksempler, gjennomarbeidet eksempel, praktisk demonstrasjon, muntlig modellforklaring, sensoroppfølging, oppgaver på tre nivåer med løsningsforslag, vanlige feil og huskeliste. Etter lesing: kapittelkontroll.</p></header>
+      <p className="flate fremhevet">I helgen er dette <b>oppslagsverk</b>, ikke pensum som skal leses lineært. Les bare det du trenger for neste oppgave i Kodelab. Kompendiet har noen eksempler i Python – helgetreningen bruker Java.</p>
       {[1, 2, 3, 4, 5, 6].map((dag) => (
         <section key={dag} className="stack">
-          <h2 className="seksjon-tittel">Dag {dag} · {STUDIEDAGER[dag - 1].ukedag} {Number(STUDIEDAGER[dag - 1].dato.slice(8))}.11</h2>
+          <h2 className="seksjon-tittel">{LES_GRUPPER[dag - 1]}</h2>
           {kapitler.filter((k) => k.dag === dag).map((k) => <KapittelKort key={k.id} k={k} d={d} gaTil={gaTil} />)}
         </section>
       ))}
@@ -606,7 +617,7 @@ export function InfoSide({ gaTil }: { gaTil: GaTil }) {
 
 /* ======================= MER / INNSTILLINGER ======================= */
 export function MerSide({ gaTil }: { gaTil: GaTil }) {
-  const valg: [Side, string, string][] = [['bank', 'Oppgavebank', 'Alle spørsmål, oppgaver og caser'], ['feil', 'Feillogg', 'Feil og svakheter'], ['info', 'Eksamensrammer og begreper', 'Oslo-modellen, kilder, begrepsliste'], ['innstillinger', 'Innstillinger', 'Tema, eksport/import, nullstill']];
+  const valg: [Side, string, string][] = [['verksted', 'Verksted', 'Eldre praktiske mikrooppgaver og caser'], ['bank', 'Oppgavebank', 'Alle spørsmål, oppgaver og caser'], ['feil', 'Feillogg', 'Feil og svakheter'], ['info', 'Eksamensrammer og begreper', 'Oslo-modellen, kilder, begrepsliste'], ['innstillinger', 'Innstillinger', 'Tema, eksport/import, nullstill']];
   return <div className="stack"><h1>Mer</h1>{valg.map(([s, n, b]) => <button key={s} className="flate valgknapp" onClick={() => gaTil(s)}><b>{n}</b><span className="liten dempet">{b}</span></button>)}</div>;
 }
 

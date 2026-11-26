@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ALLE_KM, KOMPETANSEMAL } from '../rea/data/km';
 import { STUDIEDAGER } from '../rea/data/plan';
+import { HELG_OPPGAVER, helgOppgave } from '../rea/helg/oppgaver';
 import { kapitler, kapittel, kontrollsporsmal, TILLEGG_REKKEFOLGE, fagstoffOrd } from '../rea/pensum';
 import {
   allePraktiske, caser, diagnose, droftinger, feilsok, muntlige, praktiske, tilleggForCase, tilleggsoppgaver,
@@ -153,15 +154,15 @@ describe('Oppgavebanker', () => {
   });
 });
 
-describe('Dag-for-dag-plan', () => {
-  it('har sju studiedager 23.–29. november', () => {
-    expect(STUDIEDAGER.map((d) => d.dato)).toEqual(['2026-11-23', '2026-11-24', '2026-11-25', '2026-11-26', '2026-11-27', '2026-11-28', '2026-11-29']);
+describe('Helgeplan', () => {
+  it('har bare to studiedager: 28. og 29. november', () => {
+    expect(STUDIEDAGER.map((d) => d.dato)).toEqual(['2026-11-28', '2026-11-29']);
   });
-  it('kortversjonen er ca. 90 minutter hver dag', () => {
+  it('4-timers redningsplan er ca. fire timer hver dag', () => {
     for (const d of STUDIEDAGER) {
       const sum = d.blokker.reduce((a, b) => a + b.kort, 0);
-      expect(sum, d.dato).toBeGreaterThanOrEqual(85);
-      expect(sum, d.dato).toBeLessThanOrEqual(95);
+      expect(sum, d.dato).toBeGreaterThanOrEqual(225);
+      expect(sum, d.dato).toBeLessThanOrEqual(260);
     }
   });
   it('alle henvisninger peker på innhold som finnes', () => {
@@ -170,17 +171,18 @@ describe('Dag-for-dag-plan', () => {
       b.muntlig?.forEach((id) => expect(muntlige.some((m) => m.id === id), `${b.id}: ${id}`).toBe(true));
       b.praktisk?.forEach((id) => expect(allePraktiske.some((p) => p.id === id), `${b.id}: ${id}`).toBe(true));
       b.caser?.forEach((id) => expect(caser.some((c) => c.id === id), `${b.id}: ${id}`).toBe(true));
+      b.helg?.forEach((id) => expect(helgOppgave(id), `${b.id}: ${id}`).toBeTruthy());
+      if (b.type === 'kodelab') expect(b.helg?.length, b.id).toBeGreaterThan(0);
     }
   });
-  it('hver studiedag 1–6 har lesing, gjenkalling/muntlig, anvendelse og feillogg', () => {
-    for (const d of STUDIEDAGER.slice(0, 6)) {
-      const typer = new Set(d.blokker.map((b) => b.type));
-      expect(typer.has('les'), d.dato).toBe(true);
-      expect(typer.has('muntlig') || typer.has('drofting') || d.blokker.some((b) => b.muntlig?.length), d.dato).toBe(true);
-      expect(typer.has('praktisk') || typer.has('case') || typer.has('drofting'), d.dato).toBe(true);
-      expect(typer.has('feillogg'), d.dato).toBe(true);
-    }
-    expect(STUDIEDAGER[6].blokker.filter((b) => b.type === 'sim').length).toBe(2);
+  it('lørdag er praktisk koding, søndag har to simuleringer', () => {
+    expect(STUDIEDAGER[0].blokker.filter((b) => b.type === 'kodelab').length).toBeGreaterThanOrEqual(8);
+    expect(STUDIEDAGER[1].blokker.filter((b) => b.type === 'sim').length).toBe(2);
+  });
+  it('alle praktiske bootcamp-oppgaver er lagt inn i planen', () => {
+    const iPlan = new Set(STUDIEDAGER.flatMap((d) => d.blokker.flatMap((b) => b.helg ?? [])));
+    const mangler = HELG_OPPGAVER.filter((o) => !iPlan.has(o.id)).map((o) => o.id);
+    expect(mangler).toEqual([]);
   });
 });
 

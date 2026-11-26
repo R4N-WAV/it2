@@ -1,13 +1,13 @@
 # IT2 – FAGSTOFF OG EKSAMENSPAKKE FOR REA3050
 
-**Versjon:** 22. november 2026  
+**Versjon:** 26. november 2026  
 **Fag:** Informasjonsteknologi 2 – INF01-03  
 **Eksamenskode:** REA3050 – muntlig-praktisk  
-**Forberedelsesuke:** 23.–29. november 2026  
+**Studiedager:** lørdag 28. og søndag 29. november 2026  
 **Forutsatt eksamensdag:** mandag 30. november 2026  
 **Formål:** Et selvstendig, offline faglig grunnlag for intensiv opplæring og muntlig-praktisk eksamenstrening.
 
-> **Viktig om karakter:** Ingen lærebok, app eller treningsplan kan garantere at en kandidat består. Dette dokumentet er laget for å redusere strykrisikoen ved å dekke hele læreplanen, gi flere forklaringer og eksempler, trene praktiske ferdigheter og sikte mot god kompetanse (omtrent nivå 4) med en sikkerhetsmargin. Det er ikke en offisiell sensorveiledning.
+> **Viktig om karakter og tid:** Kandidaten har ikke startet forberedelsene og har bare lørdag 28. og søndag 29. november til å øve før forutsatt eksamen mandag 30. november. Målet er å bestå med karakter 2, med en liten praktisk sikkerhetsmargin. Ingen lærebok, app eller treningsplan kan garantere karakteren. Dette dokumentet er et omfattende faggrunnlag; den nye todagers praksisplanen bakerst skal styre helgens arbeid. Det er ikke en offisiell sensorveiledning.
 
 ---
 
@@ -91,6 +91,8 @@ Denne pakken bruker derfor en **treningsrubrikk**, ikke en offisiell karakterfor
 
 Kandidaten kjenner igjen sentrale begreper og viser noe relevant forståelse. Kandidaten kan utføre enkelte grunnleggende handlinger, men trenger ofte støtte, har hull i forklaringene eller har vansker med å knytte teori til praktisk arbeid.
 
+Et offentlig eksempel på mer konkrete REA3050-kriterier finnes hos Trøndelag fylkeskommune. Der beskrives lav kompetanse (karakter 2) blant annet som at kandidaten «til en viss grad» kan forklare metoder for design og implementering, objektorientert modellering, gjenbrukbar kode og systemutviklingsmetoder; «i noen grad» kan vise forståelse for hvordan IT påvirker samfunnet og drøfte etikk, personvern og informasjonssikkerhet; og «til en viss grad» kan forklare programmeringsteknikker, OOP, dataanalyse og sikker lagring/utveksling. Dette gir et nyttig, konkret bilde av et mulig lavt måloppnåelsesnivå, men kriteriene er fra Trøndelag og er **ikke bindende for Oslo**. På din eksamen er kriteriene som følger oppgavesettet og eksamensstedets regler styrende.
+
 ### Nivå 3 – nokså god kompetanse
 
 Kandidaten forklarer sentrale begreper med egne ord, kan gjennomføre en enkel løsning, kan vise grunnleggende testing og kan gi relevante eksempler. Kandidaten kan gjøre noen feil, men viser at hovedideen er forstått og kan korrigere deler av arbeidet.
@@ -99,7 +101,7 @@ Kandidaten forklarer sentrale begreper med egne ord, kan gjennomføre en enkel l
 
 Kandidaten arbeider selvstendig med relevante problemstillinger, bruker fagbegreper presist, forklarer hvorfor en løsning fungerer, vurderer minst ett alternativ, gjennomfører relevante tester, oppdager begrensninger og kan foreslå forbedringer. Kandidaten overfører kunnskapen til nye situasjoner og kan svare på oppfølgingsspørsmål uten å være avhengig av et innøvd manus.
 
-**Målet i treningen er nivå 4.** Dette er en sikkerhetsmargin, ikke en garanti for karakter 4.
+**Målet nå er å sikre grunnleggende kompetanse på nivå 2 i alle sentrale deler, med noe ekstra trening på kode, testing og forklaring slik at én svak oppgave ikke velter hele prestasjonen. Dette er en treningsstrategi, ikke en garanti for karakter 2.**
 
 ---
 
@@ -2761,265 +2763,13 @@ For hver drøfting bør kandidaten minst nevne tre interessenter, to fordeler, t
 
 ---
 
-# DEL VI – DAG-FOR-DAG-PLAN 23.–29. NOVEMBER 2026
+# DEL VI – OPPDATERT TIDSPLAN: BARE 28.–29. NOVEMBER 2026
 
-## 16. Hovedprinsipp
+Den tidligere sjudagersplanen er utgått og skal ikke brukes. Kandidaten har ikke jobbet med faget ennå og forventer bare å kunne studere lørdag 28. og søndag 29. november. Mandag 30. november er forutsatt eksamensdag.
 
-Du har sju studiedager. Målet er ikke å lese alt én gang. Målet er å lære et bredt utvalg av sentrale begreper, anvende dem i realistiske situasjoner, og øve på å forklare dem uten å se i teksten.
+**Bruk den detaljerte todagersplanen i «PRAKTISK HELGEBOOTCAMP – REA3050» bakerst i dette dokumentet.** Den har førsteprioritet og skal styre appen. Den brede lærebokdelen i del I–V og VIII–X er referanseverk som brukes ved behov; ikke les hele kompendiet lineært i løpet av helgen.
 
-Planen tar utgangspunkt i at hverdagsøktene starter etter arbeid, omtrent kl. 17.15. Det er lagt inn pauser. Flytt klokkeslett ved behov, men behold rekkefølgen og læringsmålene.
-
-**Minimumsplan:** Hvis dagen blir vanskelig, gjennomfør minst 90 minutter: 35 min lesing, 25 min aktiv gjenkalling, 20 min praktisk/muntlig oppgave og 10 min repetisjon.
-
-**Full plan:** 2,5–3 timer på hverdager og 4–5 timer i helgen. Ikke prøv å ta igjen en tapt studiedag ved å hoppe over søvn. Prioriter kjerneferdighetene.
-
-## Mandag 23. november – Kartlegging, informasjonssystemer, IT i samfunn og etikk
-
-**Hovedmål:** Forstå hva faget handler om, identifisere kunnskapshull og kunne drøfte IT-konsekvenser.
-
-17.15–17.35 – Oppstart og diagnostisk kartlegging
-- Svar uten hjelp på 12 korte spørsmål fra kapittel 1–15.
-- Skriv ned tre temaer du er usikker på.
-- Ikke bruk mer enn 20 minutter. Poenget er å finne startnivået.
-
-17.35–18.15 – Les kapittel 1
-- Informasjonsteknologi og informasjonssystemer.
-- Data, informasjon og kunnskap.
-- Muligheter, utfordringer og konsekvenser.
-
-18.15–18.25 – Pause
-
-18.25–19.10 – Les kapittel 2
-- Etikk, GDPR, personopplysninger.
-- Dataminimering og formålsbegrensning.
-- Kameraovervåking, KI-skjevhet og digitale konsekvenser.
-
-19.10–19.20 – Pause
-
-19.20–20.00 – Drøftingsøvelse
-- Gjennomfør kameraovervåkingsoppgaven i kapittel 2.
-- Snakk høyt i 3 minutter.
-- Bruk S-I-K-A-T-modellen.
-
-20.00–20.30 – Muntlig kontroll
-- Svar på tema A og B i sensorsamtalene.
-- Gjenta alle svar du fikk under nivå 3.
-
-**Dagens krav:** Kunne forklare et informasjonssystem med seks komponenter, nevne konkrete konsekvenser av IT og gjennomføre en balansert etisk drøfting.
-
-## Tirsdag 24. november – Algoritmisk tenkning, programmering og designvalg
-
-**Hovedmål:** Kunne forstå, forklare og lage enkel programlogikk.
-
-17.15–17.30 – Repetisjon fra mandag
-- Forklar data/informasjon/kunnskap.
-- Forklar dataminimering.
-
-17.30–18.20 – Les kapittel 3
-- Variabler, datatyper, operatorer.
-- Betingelser, løkker og funksjoner.
-- Lister, dictionary, input/output.
-
-18.20–18.30 – Pause
-
-18.30–19.15 – Algoritmer og problemløsing
-- Pseudokode.
-- Flytskjema.
-- Bryte oppgave i input, behandling og output.
-- Grenseverdier og spesialtilfeller.
-
-19.15–19.25 – Pause
-
-19.25–20.10 – Les kapittel 6
-- Krav, modularitet og designvalg.
-- Sammenligning av enkle alternative løsninger.
-
-20.10–20.40 – Praktisk øvelse
-- Lag billettprisfunksjonen.
-- Forklar hvorfor du har valgt betingelsesrekkefølgen.
-- Lag fire tester.
-
-**Dagens krav:** Kunne forklare en enkel algoritme steg for steg, skrive eller tilpasse en enkel funksjon, og forklare minst to designvalg.
-
-## Onsdag 25. november – OOP, klasser, arv, komposisjon og UML
-
-**Hovedmål:** Dette er en av de viktigste dagene. Du skal kunne modellere en oppgave og forklare OOP med eksempler.
-
-17.15–17.30 – Repetisjon
-- Skriv pseudokode for en enkel oppgave uten hjelp.
-
-17.30–18.20 – Les kapittel 4
-- Klasse, objekt, attributt, metode, konstruktør.
-- `self`, innkapsling, tilstand.
-- Arv, overstyring, polymorfisme og komposisjon.
-
-18.20–18.30 – Pause
-
-18.30–19.15 – Les kapittel 5
-- UML-klasser.
-- Relasjoner og multiplisitet.
-- Fra tekstlig oppgave til modell.
-
-19.15–19.25 – Pause
-
-19.25–20.10 – Praktisk modellering
-- Gjør CASE 1 (bibliotek) eller CASE 4 (togsett).
-- Tegn klassediagram på papir.
-- Forklar hvorfor du valgte arv eller komposisjon.
-
-20.10–20.45 – Muntlig kontroll
-- Svar på sensorsamtale D.
-- Forklar minst ett klassediagram uten å lese.
-
-**Dagens krav:** Kunne forklare forskjell på klasse og objekt, lage en enkel klasse, forstå arv og komposisjon og beskrive en UML-modell.
-
-## Torsdag 26. november – Testing, feilsøking og gjenbrukbar kode
-
-**Hovedmål:** Vise at du kan kontrollere kvalitet og forbedre et program.
-
-17.15–17.30 – Repetisjon av OOP
-- Forklar et eget klassediagram fra onsdag.
-
-17.30–18.15 – Les kapittel 7
-- Feiltyper.
-- Testnivåer.
-- Testteknikker og grenseverdier.
-- Feilsøkingsprosess.
-
-18.15–18.25 – Pause
-
-18.25–19.05 – Les kapittel 8
-- Funksjoner og abstraksjon.
-- Gjenbrukbar kode, DRY, modularitet.
-
-19.05–19.15 – Pause
-
-19.15–20.00 – Praktisk øvelse
-- Finn en logisk feil i et kodeeksempel.
-- Lag en testplan for booking eller utlån.
-- Forklar forventet og faktisk resultat.
-
-20.00–20.30 – Muntlig kontroll
-- Svar på sensorsamtale E og F.
-
-**Dagens krav:** Kunne skille feiltyper, lage relevante testtilfeller, forklare hvorfor testing ikke beviser at programmet er feilfritt, og forklare hvordan kode kan gjenbrukes.
-
-## Fredag 27. november – Data, databaser, datautveksling og sikkerhet
-
-**Hovedmål:** Kunne forklare hvordan data struktureres, behandles, lagres og sikres.
-
-17.15–17.30 – Repetisjon
-- Forklar testnivåene og hva en grenseverdi er.
-
-17.30–18.10 – Les kapittel 11 og 12
-- CSV, JSON, XML.
-- Databaser, primærnøkkel, fremmednøkkel, SQL, relasjoner.
-
-18.10–18.20 – Pause
-
-18.20–19.00 – Les kapittel 13 og 14
-- Datasett, datakvalitet, statistikk, diagrammer.
-- API, HTTP, klient/server.
-
-19.00–19.10 – Pause
-
-19.10–19.50 – Les kapittel 15
-- CIA-triaden.
-- Autentisering/autorisasjon.
-- Kryptering/hashing.
-- Backup, trusler og tiltak.
-
-19.50–20.30 – Praktisk og muntlig øvelse
-- Gjør CASE 2 eller CASE 6.
-- Forklar datakvalitet og sikkerhet.
-
-**Dagens krav:** Kunne sammenligne CSV og JSON, forklare primærnøkkel/fremmednøkkel, beskrive enkel dataanalyse, og skille kryptering fra hashing.
-
-## Lørdag 28. november – Brukervennlighet, systemutvikling og full case
-
-**Hovedmål:** Knytte tekniske løsninger til brukerbehov og utviklingsprosess.
-
-10.00–10.45 – Les kapittel 9
-- Brukervennlighet, UX, universell utforming og brukertesting.
-
-10.45–11.00 – Pause
-
-11.00–11.45 – Les kapittel 10
-- Fossefall, smidig, Scrum, Git, samarbeid og dokumentasjon.
-
-11.45–12.15 – Aktiv gjenkalling
-- Forklar dagens temaer uten å se i teksten.
-
-12.15–13.00 – Pause/lunsj
-
-15.00–16.00 – Full praktisk case
-- Velg en av CASE 1, 4, 5 eller 7.
-- Bruk 45–60 minutter på modell, funksjon, test og begrunnelse.
-
-16.00–16.15 – Pause
-
-16.15–17.00 – Sensorøvelse
-- Gjennomfør minst 12 oppfølgingsspørsmål.
-- Registrer alle spørsmål du ikke kan svare på.
-
-**Dagens krav:** Kunne forklare hvordan brukerbehov påvirker design, vise hvordan en løsning kan testes med brukere, og forklare minst én systemutviklingsmetode og ett samarbeidverktøy.
-
-## Søndag 29. november – Full eksamenssimulering og sikkerhetsmargin
-
-**Hovedmål:** Teste om du kan prestere under realistiske forhold og rette de siste alvorlige hullene.
-
-10.00–10.30 – Simulering 1: Forberedelse
-- Trekk tilfeldig en case.
-- Sett timer på 30 minutter.
-- Ikke slå opp modellsvaret.
-- Skriv korte notater som om du var på eksamen.
-
-10.30–11.15 – Simulering 1: Eksaminasjon
-- Forklar løsningen.
-- Besvar oppfølgingsspørsmål.
-- Gjennomfør en ukjent tilleggsoppgave fra et annet mål.
-
-11.15–11.45 – Vurdering
-- Bruk rubrikken.
-- Marker de tre største hullene.
-
-11.45–12.15 – Pause
-
-12.15–13.00 – Reparer svakheter
-- Les bare de relevante underkapitlene.
-- Løs en ny oppgave på samme område.
-
-15.00–15.30 – Simulering 2: Forberedelse
-- Trekk en ny case fra et annet fagområde.
-- 30 minutter, ingen fasit.
-
-15.30–16.15 – Simulering 2: Eksaminasjon
-- Praktisk demonstrasjon.
-- Fagsamtale.
-- Ukjent tilleggsoppgave.
-
-16.15–17.00 – Siste beredskapskontroll
-- Forklar alle 11 kompetansemål med én setning hver.
-- Forklar klasse/objekt/arv/komposisjon.
-- Lag en enkel testplan.
-- Drøft et personverndilemma.
-- Forklar CSV/JSON og grunnleggende sikkerhet.
-
-**Dagens krav:** To hele simuleringer. Ikke godkjenn eksamensklar-status hvis du ikke klarer å forklare og anvende stoffet på tvers av minst to ulike caser.
-
-## Mandag 30. november – Eksamensdag
-
-Ikke prøv å lære et nytt stort tema. Les bare korte huskelister hvis det gir ro.
-
-- Sjekk oppmøtested, tidspunkt og informasjonsskriv i Privatistportalen.
-- Ta med gyldig legitimasjon.
-- Ta med egne skrivesaker.
-- Ta med PC/lader dersom du ønsker å bruke PC i forberedelsesrommet og det er tillatt i informasjonsskrivet.
-- Ikke regn med internettilgang eller teknisk hjelp.
-- Husk at hjemmeproduserte notater ikke kan tas med inn under eksaminasjonen i Oslo-modellen; bruk papiret som deles ut i forberedelsesrommet.
-- Ikke lag PowerPoint.
-- Når du får oppgaven: finn problem, interessenter, nødvendige data, modell, praktisk del, test og mulige forbedringer.
-- Husk at sensor kan gi en ukjent tilleggsoppgave fra andre kompetansemål.
+Prioriter reell praksis: skriv kode fra blankt ark, spor kode, fullfør kode, rett feil, bygg en enkel klasse, test løsningen og forklar den høyt. Les bare den forklaringen du trenger for å løse neste oppgave.
 
 ---
 
@@ -3075,7 +2825,7 @@ Du kjenner ikke nødvendigvis nøyaktig tidsfordeling. Du skal være fleksibel. 
 
 Ikke prøv å styre samtalen tilbake til det du kan best. Vis at du kan knytte den nye oppgaven til relevant fagstoff.
 
-## 19. Beredskapskontroll – hva betyr «klar»?
+## 19. Beredskapskontroll – hva betyr «klar nok til å gå opp»?
 
 Appen skal bruke denne kontrollen. Den er strengere enn «jeg har fullført pensum».
 
@@ -3094,14 +2844,14 @@ Appen skal bruke denne kontrollen. Den er strengere enn «jeg har fullført pens
 - Du kan forklare alle 11 kompetansemål med egne ord.
 - Du kan løse minst én oppgave innen hvert mål.
 - Du har gjennomført to fullstendige simuleringer.
-- Du har minst nivå 3 på alle kritiske områder i to ulike økter.
-- Du har nivå 4 på flere områder, og kan vise at du kan anvende kunnskapen på en ny case.
+- Du kan vise grunnleggende kompetanse på de kritiske områdene i minst to forskjellige oppgaver.
+- Du kan anvende den samme grunnleggende ferdigheten i en litt endret situasjon, ikke bare gjenta en pugget løsning.
 - Du kan forklare en løsning uten å lese et ferdig svar.
 - Du har svart tilfredsstillende på tilleggsoppgaver som dekker andre mål enn hovedcasen.
 
 Dersom disse kravene ikke er oppfylt, skal appen vise hva som mangler. Ikke gi en grønn status basert på antall leste sider.
 
-## 20. Slik bør du prioritere hvis tiden blir knapp
+## 20. Slik bør du prioritere i den svært korte tidsrammen
 
 Ikke hopp over hele fagområder. Bruk denne prioriteringsrekkefølgen:
 
@@ -3198,7 +2948,7 @@ https://developer.mozilla.org/en-US/docs/Web/HTTP
 - Oslo opplyser at tidligere muntlige og muntlig-praktiske privatistoppgaver ikke publiseres. Casene i denne pakken er derfor originale simuleringer, ikke autentiske tidligere eksamenssett.
 - Tidligere skriftlige eksamener kan gi nyttig faglig inspirasjon, men de er ikke dokumentasjon på nøyaktig hvordan muntlig oppgave eller sensor vil se ut.
 - SQL, API, HTTP, nettverk, binærtall og enkelte sikkerhetsbegreper er støttestoff for å forstå lagring, utveksling og sikring av data og informasjonssystemer. Ikke alle detaljene er egne formuleringer i kompetansemålene.
-- Treningsrubrikken og «nivå 4»-beredskapskravene er pedagogiske verktøy laget for å gi sikkerhetsmargin. De er ikke offisielle nasjonale sensorkriterier for REA3050.
+- Treningsrubrikken og beredskapskravene i denne pakken er pedagogiske verktøy. De er ikke offisielle nasjonale sensorkriterier for REA3050. Trøndelags publiserte karakter-2-kriterier er tatt med som et sammenligningsgrunnlag, ikke som Oslo-regler.
 
 ---
 
@@ -3206,7 +2956,7 @@ https://developer.mozilla.org/en-US/docs/Web/HTTP
 
 Bruk denne fagstoffpakken som en lokal lærebok og oppgavebank. Appen skal ikke redusere teksten til korte «Les»-kort. Hver modul må gi eleven nok bakgrunn til å forstå sammenhenger, se flere eksempler, utføre oppgaver og forklare stoffet muntlig.
 
-Den viktigste funksjonen er ikke å telle hvor mange sider som er lest. Den viktigste funksjonen er å dokumentere at eleven kan forklare, anvende, teste, vurdere og demonstrere fagstoff i nye situasjoner – med en sikkerhetsmargin mot stryk.
+Den viktigste funksjonen er ikke å telle hvor mange sider som er lest. Den viktigste funksjonen er å dokumentere at kandidaten kan forklare, anvende, teste og demonstrere grunnleggende fagstoff i nye situasjoner – med en liten sikkerhetsmargin mot stryk.
 
 # DEL IX – UTDYPENDE LÆREBOKSTOFF OG EKSTRA EKSEMPLER
 
@@ -3694,3 +3444,6 @@ Du bør kunne svare ja på de fleste av disse spørsmålene:
 
 Hvis du bare kan gjengi et modell svar, har du ikke sikkerhetsmargin ennå. Du må kunne bruke kunnskapen i en ny sammenheng.
 
+
+
+---

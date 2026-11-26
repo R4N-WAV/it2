@@ -1,4 +1,5 @@
 /* Typer for REA3050-trenerens innhold og fremdrift. */
+import type { HelgForsok } from './helg/typer';
 
 export type KmId = 'KM1' | 'KM2' | 'KM3' | 'KM4' | 'KM5' | 'KM6' | 'KM7' | 'KM8' | 'KM9' | 'KM10' | 'KM11';
 export type Niva = 1 | 2 | 3; // 1 grunnleggende, 2 middels, 3 utfordrende
@@ -184,4 +185,6 @@ export interface AppData {
   slettet?: Record<string, number>; // «gravsteiner»: 'lest:id', 'plan:dato:id', 'feil:id' -> tidspunkt fjernet
   planTid?: Record<string, number>; // 'dato:id' -> tidspunkt blokken ble krysset av
   nullstilt?: number; // tidspunkt for siste nullstilling (nyeste nullstilling vinner på alle enheter)
+  /* Helgesprint 28.–29.11 (Kodelab) */
+  helg?: Record<string, HelgForsok>; // oppgave-id -> forsøk
 }

@@ -78,6 +78,7 @@ export function sammenslå(lokal: AppData, fjern: AppData): AppData {
     diagnose: (b.diagnose?.tid ?? 0) > (a.diagnose?.tid ?? 0) ? b.diagnose : a.diagnose,
     aktivitet: [...new Set([...a.aktivitet, ...b.aktivitet])].sort(),
     slettet,
+    helg: nyestePerNokkel(a.helg ?? {}, b.helg ?? {}, (x) => x.tid),
     planTid,
     nullstilt: maks(a.nullstilt, b.nullstilt) || undefined,
   };

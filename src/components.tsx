@@ -35,6 +35,7 @@ const IKONER: Record<string, string> = {
   mikrofon: 'M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zM19 11a7 7 0 0 1-14 0M12 18v3',
   bok: 'M4 5a2 2 0 0 1 2-2h5v17H6a2 2 0 0 0-2 2zM20 5a2 2 0 0 0-2-2h-5v17h5a2 2 0 0 1 2 2zM4 5v17M20 5v17',
   advarsel: 'M12 3l10 18H2zM12 10v5M12 18h.01',
+  kode: 'M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16',
 };
 
 export function Ikon({ navn, stor }: { navn: string; stor?: boolean }) {

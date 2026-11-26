@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { DIMENSJONER } from './data/km';
+import type { HelgForsok } from './helg/typer';
 import type { AktivSim, AppData, Feil, KmId, SimResultat, Vurdering } from './typer';
 import { datoNokkel, nesteRep } from './vurdering';
 
@@ -7,7 +8,7 @@ import { datoNokkel, nesteRep } from './vurdering';
 export const NOKKEL = 'it2-rea3050-v2';
 
 export function tomData(): AppData {
-  return { versjon: 2, lest: {}, forklart: {}, oppgaver: {}, vurderinger: [], rep: {}, sims: [], aktivSim: null, feillogg: [], plan: {}, kortversjon: {}, diagnose: null, aktivitet: [], slettet: {}, planTid: {} };
+  return { versjon: 2, lest: {}, forklart: {}, oppgaver: {}, vurderinger: [], rep: {}, sims: [], aktivSim: null, feillogg: [], plan: {}, kortversjon: {}, diagnose: null, aktivitet: [], slettet: {}, planTid: {}, helg: {} };
 }
 
 function last(): AppData {
@@ -107,6 +108,19 @@ export function settKortversjon(dato: string, paa: boolean) {
 }
 export function lagreDiagnose(svar: Record<string, boolean>, usikker: string) {
   lagre({ ...data, diagnose: { tid: Date.now(), svar, usikker } });
+}
+
+/* ---------- Helgesprint (Kodelab) ---------- */
+export const tomtForsok = (): HelgForsok => ({ kode: '', hint: 0, fasitSett: false, lost: false, kjort: false, sjekket: [], muntlig: {}, forsok: 0, tid: 0 });
+export function lagreHelg(id: string, endring: Partial<HelgForsok> | ((f: HelgForsok) => Partial<HelgForsok>)) {
+  const gml = { ...tomtForsok(), ...(data.helg?.[id] ?? {}) };
+  const ny = { ...gml, ...(typeof endring === 'function' ? endring(gml) : endring), tid: Date.now() };
+  lagre({ ...data, helg: { ...(data.helg ?? {}), [id]: ny } });
+}
+export function nullstillHelgOppgave(id: string) {
+  const gml = data.helg?.[id];
+  // Ny runde: beholder koden, men nullstiller hint/fasit/løst. Tidligere status forsvinner – bare nye forsøk teller.
+  lagre({ ...data, helg: { ...(data.helg ?? {}), [id]: { ...tomtForsok(), kode: gml?.kode ?? '', tid: Date.now() } } });
 }
 
 /* ---------- Simulator ---------- */

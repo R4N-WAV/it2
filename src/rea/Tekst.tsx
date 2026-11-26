@@ -17,7 +17,7 @@ const BOKS: Record<string, { klasse: string; navn: string }> = {
   HUSK: { klasse: 'husk', navn: 'Husk' }, FEIL: { klasse: 'feil', navn: 'Vanlig feil' }, EKSAMEN: { klasse: 'eksamen', navn: 'Til eksamen' },
   TIPS: { klasse: 'tips', navn: 'Tips' }, EKSEMPEL: { klasse: 'eksempel', navn: 'Eksempel' },
 };
-const SPRAK: Record<string, string> = { python: 'Python', text: 'Pseudokode / tekst', csv: 'CSV', json: 'JSON', xml: 'XML', sql: 'SQL' };
+const SPRAK: Record<string, string> = { java: 'Java', python: 'Python', text: 'Pseudokode / tekst', csv: 'CSV', json: 'JSON', xml: 'XML', sql: 'SQL' };
 
 export interface Kontekst { nokkel: string; km: KmId[] }
 
